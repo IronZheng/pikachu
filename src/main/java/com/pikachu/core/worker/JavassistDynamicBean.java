@@ -3,12 +3,12 @@ package com.pikachu.core.worker;
 import com.pikachu.core.annotations.CssPath;
 import com.pikachu.core.annotations.MathUrl;
 import com.pikachu.core.exception.SimpleException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,8 +17,9 @@ import java.util.Map;
  **/
 
 
-public class JavassistDynamicBean {
-    private static Log log = LogFactory.getLog(JavassistDynamicBean.class);
+public class JavassistDynamicBean extends DynamicBean{
+
+    private final static Logger log = LoggerFactory.getLogger(JavassistDynamicBean.class);
     private String id;
     private String url;
     private MathUrl.Method method;
@@ -30,7 +31,6 @@ public class JavassistDynamicBean {
             throw new RuntimeException("[error] class is null");
         }
         load(bean);
-
     }
 
     private JavassistDynamicBean load(Class<?> bean) {
@@ -41,10 +41,11 @@ public class JavassistDynamicBean {
             throw new RuntimeException("[error] url can not be null");
         }
         this.method = u.method();
-        return this;
+        return attr(bean);
     }
 
-    private JavassistDynamicBean attr(Class<?> bean) {
+    public JavassistDynamicBean attr(Class<?> bean) {
+        attr = new HashMap<>();
         try {
             Field[] fields = bean.getDeclaredFields();
             for (Field field : fields) {
@@ -58,49 +59,28 @@ public class JavassistDynamicBean {
                 }
             }
         } catch (Exception e) {
-            log.error(e);
+            log.error("attr error",e);
             throw new SimpleException(e);
         }
         return this;
     }
 
-    private void regist(JavassistDynamicBean bean) {
+    public void regist(JavassistDynamicBean bean) {
 
     }
-}
 
-class Target {
-    private String name;
-    private String type;
-    private String selector;
+    @Override
+    public void start() {
 
-    public Target(String name, String type, String selector) {
-        this.name = name;
-        this.type = type;
-        this.selector = selector;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getSelector() {
-        return selector;
-    }
-
-    public void setSelector(String selector) {
-        this.selector = selector;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public String toString() {
+        return "JavassistDynamicBean{" +
+                "id='" + id + '\'' +
+                ", url='" + url + '\'' +
+                ", method=" + method +
+                ", attr=" + attr +
+                '}';
     }
 }

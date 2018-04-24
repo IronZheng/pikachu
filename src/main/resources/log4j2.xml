@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+    <Properties>
+        <Property name="logBase">../log</Property>
+    </Properties>
+    <appenders>
+        <Console name="console-appender" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %msg%n" />
+        </Console>
+        <!-- pikachu-default -->
+        <RollingFile name="pikachu-default" fileName="${logBase}/pikachu/default.log"
+                     filePattern="${logBase}/pikachu/default/default_%d{yyyy-MM-dd}_%i.log">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%t]  %msg%n"/>
+            <!-- <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%t] [%logger{36}] %msg%n"/> -->
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+        <!-- pikachu-trace -->
+        <RollingFile name="pikachu-trace" fileName="${logBase}/pikachu/trace.log"
+                     filePattern="${logBase}/pikachu/trace/trace_%d{yyyy-MM-dd}_%i.log">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="debug" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+        <!-- pikachu-debug -->
+        <RollingFile name="pikachu-debug" fileName="${logBase}/pikachu/debug.log"
+                     filePattern="${logBase}/pikachu/debug/debug_%d{yyyy-MM-dd}_%i.log">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+        <!-- pikachu-info-error -->
+        <RollingFile name="pikachu-info-error" fileName="${logBase}/pikachu/info-error.log"
+                     filePattern="${logBase}/pikachu/info-error/info-error_%d{yyyy-MM-dd}_%i.log">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+        <logger name="com.flyread.dbpikachu" level="trace" additivity="true">
+            <appender-ref ref="pikachu-default" />
+            <appender-ref ref="pikachu-trace" />
+            <appender-ref ref="pikachu-debug" />
+            <appender-ref ref="pikachu-info-error"/>
+        </logger>
+        <root level="error">
+            <appender-ref ref="console-appender" />
+        </root>
+    </loggers>
+</configuration>
