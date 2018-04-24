@@ -40,4 +40,13 @@ public class Target {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Target{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", selector='" + selector + '\'' +
+                '}';
+    }
 }

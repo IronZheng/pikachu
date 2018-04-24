@@ -6,10 +6,8 @@ import com.pikachu.core.exception.SimpleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author zhenggm
@@ -17,13 +15,9 @@ import java.util.Map;
  **/
 
 
-public class JavassistDynamicBean extends DynamicBean{
-
+public class JavassistDynamicBean extends DynamicBean {
     private final static Logger log = LoggerFactory.getLogger(JavassistDynamicBean.class);
-    private String id;
-    private String url;
     private MathUrl.Method method;
-    private Map<String, Object> attr;
 
     public JavassistDynamicBean(String id, Class<?> bean) {
         this.id = id;
@@ -59,15 +53,12 @@ public class JavassistDynamicBean extends DynamicBean{
                 }
             }
         } catch (Exception e) {
-            log.error("attr error",e);
+            log.error("attr error", e);
             throw new SimpleException(e);
         }
         return this;
     }
 
-    public void regist(JavassistDynamicBean bean) {
-
-    }
 
     @Override
     public void start() {

@@ -54,7 +54,7 @@
     </appenders>
 
     <loggers>
-        <logger name="com.flyread.dbpikachu" level="trace" additivity="true">
+        <logger name="com.pikachu.core" level="trace" additivity="true">
             <appender-ref ref="pikachu-default" />
             <appender-ref ref="pikachu-trace" />
             <appender-ref ref="pikachu-debug" />
