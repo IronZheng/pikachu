@@ -3,7 +3,6 @@ package com.pikachu.core.worker;
 import java.util.Map;
 
 /**
- *
  * @author zhenggm
  * @create 2018-04-24 17:18
  **/

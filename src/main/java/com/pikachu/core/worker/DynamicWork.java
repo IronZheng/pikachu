@@ -15,11 +15,11 @@ public class DynamicWork {
         this.id = id;
     }
 
-    public JavassistDynamicBean html(String id,Class<?> bean) {
-        return new JavassistDynamicBean(id,bean);
+    public Worker html(String id,Class<?> bean) {
+        return new Worker(id,bean);
     }
 
-    public JavassistDynamicBean html(Class<?> bean) {
-        return new JavassistDynamicBean(RandomStringUtils.randomAlphabetic(6) + System.nanoTime(),bean);
+    public Worker html(Class<?> bean) {
+        return new Worker(RandomStringUtils.randomAlphabetic(6) + System.nanoTime(),bean);
     }
 }

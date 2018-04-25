@@ -3,6 +3,7 @@ package com.pikachu.core.worker;
 import com.pikachu.core.annotations.CssPath;
 import com.pikachu.core.annotations.MathUrl;
 import com.pikachu.core.exception.SimpleException;
+import com.pikachu.core.pipeline.Pipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +16,12 @@ import java.util.HashMap;
  **/
 
 
-public class JavassistDynamicBean extends DynamicBean {
-    private final static Logger log = LoggerFactory.getLogger(JavassistDynamicBean.class);
+public class Worker extends DynamicBean {
+    private final static Logger log = LoggerFactory.getLogger(Worker.class);
     private MathUrl.Method method;
+    private Pipeline pipeline;
 
-    public JavassistDynamicBean(String id, Class<?> bean) {
+    public Worker(String id, Class<?> bean) {
         this.id = id;
         if (bean == null) {
             throw new RuntimeException("[error] class is null");
@@ -27,7 +29,7 @@ public class JavassistDynamicBean extends DynamicBean {
         load(bean);
     }
 
-    private JavassistDynamicBean load(Class<?> bean) {
+    private Worker load(Class<?> bean) {
         MathUrl u = bean.getAnnotation(MathUrl.class);
         log.debug(bean.getName() + "is load");
         this.url = u.url();
@@ -38,7 +40,7 @@ public class JavassistDynamicBean extends DynamicBean {
         return attr(bean);
     }
 
-    public JavassistDynamicBean attr(Class<?> bean) {
+    public Worker attr(Class<?> bean) {
         attr = new HashMap<>();
         try {
             Field[] fields = bean.getDeclaredFields();
@@ -59,10 +61,16 @@ public class JavassistDynamicBean extends DynamicBean {
         return this;
     }
 
+    public Worker addPipeline(Pipeline pipeline) {
+        this.pipeline = pipeline;
+        return this;
+    }
 
     @Override
     public void start() {
-
+        if (null == pipeline) {
+            throw new RuntimeException("pipeline can not be null.");
+        }
     }
 
     @Override
