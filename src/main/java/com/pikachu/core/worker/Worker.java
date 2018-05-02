@@ -71,15 +71,34 @@ public class Worker extends DynamicBean {
         if (null == pipeline) {
             throw new RuntimeException("pipeline can not be null.");
         }
+
     }
 
     @Override
     public String toString() {
-        return "JavassistDynamicBean{" +
-                "id='" + id + '\'' +
+        return "Worker{" +
+                "method=" + method +
+                ", pipeline=" + pipeline +
+                ", id='" + id + '\'' +
                 ", url='" + url + '\'' +
-                ", method=" + method +
                 ", attr=" + attr +
                 '}';
+    }
+
+
+    public MathUrl.Method getMethod() {
+        return method;
+    }
+
+    public void setMethod(MathUrl.Method method) {
+        this.method = method;
+    }
+
+    public Pipeline getPipeline() {
+        return pipeline;
+    }
+
+    public void setPipeline(Pipeline pipeline) {
+        this.pipeline = pipeline;
     }
 }

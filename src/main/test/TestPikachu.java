@@ -1,4 +1,5 @@
-import com.pikachu.core.worker.JavassistDynamicBean;
+import com.pikachu.core.worker.DynamicBean;
+import com.pikachu.core.worker.Worker;
 
 /**
  * @author zhenggm
@@ -9,7 +10,7 @@ import com.pikachu.core.worker.JavassistDynamicBean;
 public class TestPikachu {
 
     public static void main(String[] args) {
-        JavassistDynamicBean jdb= new JavassistDynamicBean("test",TestBean.class);
+        Worker jdb= new Worker("test",TestBean.class);
         System.out.println(jdb);
     }
 }
