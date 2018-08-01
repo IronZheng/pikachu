@@ -12,5 +12,13 @@ public abstract class Pipeline<T> {
         this.bean = t;
     }
 
-    abstract void process(T t);
+    public abstract void output(String json);
+
+    public T getBean() {
+        return bean;
+    }
+
+    public void setBean(T bean) {
+        this.bean = bean;
+    }
 }

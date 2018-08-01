@@ -1,22 +1,24 @@
 import com.pikachu.core.annotations.CssPath;
 import com.pikachu.core.annotations.MathUrl;
 
+import java.util.List;
+
 /**
  * @author zhenggm
  * @create 2018-04-24 17:12
  **/
 
-@MathUrl(url = "http://www.baidu.com", method = MathUrl.Method.GET)
+@MathUrl(url = "http://www.meizitu.com/tag/quanluo_4_1.html", method = MathUrl.Method.GET)
 public class TestBean {
 
-    @CssPath(selector = "div>h1")
-    private String title;
+    @CssPath(selector = "#maincontent > div.inWrap > ul>li>div>div>a")
+    private List list;
 
-    public String getTitle() {
-        return title;
+    public List getTitle() {
+        return list;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(List list) {
+        this.list = list;
     }
 }

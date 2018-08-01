@@ -1,3 +1,4 @@
+import com.pikachu.core.engine.Pikachu;
 import com.pikachu.core.worker.DynamicBean;
 import com.pikachu.core.worker.Worker;
 
@@ -10,7 +11,12 @@ import com.pikachu.core.worker.Worker;
 public class TestPikachu {
 
     public static void main(String[] args) {
-        Worker jdb= new Worker("test",TestBean.class);
-        System.out.println(jdb);
+
+        new Pikachu("test")
+                .init()
+                .regist(new Worker("test", TestBean.class)
+                        .addPipeline(new TestPipeline(new TestBean())))
+                .start();
+
     }
 }

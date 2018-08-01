@@ -11,7 +11,7 @@ import java.util.Map;
 public abstract class DynamicBean {
     public String id;
     public String url;
-    public Map<String, Object> attr;
+    public Map<String, Target> attr;
 
     public abstract void start();
 
@@ -31,11 +31,11 @@ public abstract class DynamicBean {
         this.url = url;
     }
 
-    public Map<String, Object> getAttr() {
+    public Map<String, Target> getAttr() {
         return attr;
     }
 
-    public void setAttr(Map<String, Object> attr) {
+    public void setAttr(Map<String, Target> attr) {
         this.attr = attr;
     }
 }
