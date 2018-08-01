@@ -12,13 +12,13 @@ import java.util.List;
 public class TestBean {
 
     @CssPath(selector = "#maincontent > div.inWrap > ul>li>div>div>a")
-    private List list;
+    private List img;
 
     public List getTitle() {
-        return list;
+        return img;
     }
 
     public void setTitle(List list) {
-        this.list = list;
+        this.img = list;
     }
 }

@@ -1,4 +1,8 @@
+import com.alibaba.fastjson.JSON;
 import com.pikachu.core.pipeline.Pipeline;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author : iron
@@ -16,5 +20,7 @@ public class TestPipeline extends Pipeline<TestBean> {
     @Override
     public void output(String json) {
         System.out.println(json);
+        Map<String,Object> test = JSON.parseObject(json, Map.class);
+        System.out.println(test.get("img"));
     }
 }
