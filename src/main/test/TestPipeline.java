@@ -1,7 +1,6 @@
 import com.alibaba.fastjson.JSON;
 import com.pikachu.core.pipeline.Pipeline;
 
-import java.util.List;
 import java.util.Map;
 
 /**
