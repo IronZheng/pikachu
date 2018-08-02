@@ -72,18 +72,17 @@ public class PikachuCore {
         }
 
         Map<String, Object> target = new HashMap<>();
+        HtmlCleaner hc = new HtmlCleaner();
+        TagNode tn = hc.clean(doc.body().html());
+        org.w3c.dom.Document dom = new DomSerializer(new CleanerProperties()).createDOM(tn);
+        XPath xPath = XPathFactory.newInstance().newXPath();
+
         for (Map.Entry<String, Target> attr : worker.getAttr().entrySet()) {
             if (null != attr.getValue().getSelector()) {
-
                 Elements elements = doc.select(attr.getValue().getSelector());
                 target.put(attr.getValue().getName(), elements.toString());
-
             }
             if (null != attr.getValue().getXpath()) {
-                HtmlCleaner hc = new HtmlCleaner();
-                TagNode tn = hc.clean(doc.body().html());
-                org.w3c.dom.Document dom = new DomSerializer(new CleanerProperties()).createDOM(tn);
-                XPath xPath = XPathFactory.newInstance().newXPath();
                 NodeList result = (NodeList) xPath.evaluate(attr.getValue().getXpath(),
                         dom, XPathConstants.NODESET);
                 target.put(attr.getValue().getName(), result);
