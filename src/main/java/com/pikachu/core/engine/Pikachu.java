@@ -11,6 +11,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zhenggm
@@ -21,14 +26,18 @@ public class Pikachu {
     private final static Logger log = LoggerFactory.getLogger(Pikachu.class);
     private String name;
     private List<Worker> workerList;
-    private Integer maxThreadNum;
-    private Integer coreNum;
-    private Document doc;
+
+    private ExecutorService pikachuPool;
+    // 默认最大线程数
+    private Integer maxThreadNum = 10;
+
+    // 默认核心线程数
+    private Integer coreNum = 3;
+
     private PikachuCore core;
 
     public Pikachu(String name) {
         this.name = name;
-
     }
 
     /**
@@ -38,15 +47,23 @@ public class Pikachu {
      */
     public Pikachu init() {
         workerList = new ArrayList<>();
-        core = new PikachuCore(workerList);
+
+        pikachuPool = new ThreadPoolExecutor(
+                coreNum, maxThreadNum, 0L, TimeUnit.SECONDS,
+                new LinkedBlockingDeque<>(1024), new PiakchuFactory("pikachu")
+                , new ThreadPoolExecutor.AbortPolicy());
+
+        core = new PikachuCore(workerList,pikachuPool);
         return this;
     }
 
     public Pikachu regist(Worker worker) {
         if (null == worker) {
-            throw new SimpleException("null");
+            throw new SimpleException("worker is null");
         }
         workerList.add(worker);
+
+        core.putWorker(worker);
         return this;
     }
 
@@ -64,5 +81,15 @@ public class Pikachu {
 
     public void stop() {
 
+    }
+
+    public Pikachu setMaxThreadNum(Integer maxThreadNum) {
+        this.maxThreadNum = maxThreadNum;
+        return this;
+    }
+
+    public Pikachu setCoreNum(Integer coreNum) {
+        this.coreNum = coreNum;
+        return this;
     }
 }

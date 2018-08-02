@@ -20,10 +20,9 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author : iron
@@ -38,25 +37,41 @@ public class PikachuCore {
     private Document doc;
     private List<Worker> workers;
 
-    public PikachuCore(List<Worker> workers) {
+    private Queue<Worker> workerQueue;
+
+    private ExecutorService pikachuPool;
+
+    public PikachuCore(List<Worker> workers, ExecutorService pikachuPool) {
         this.workers = workers;
+        this.workerQueue = new ArrayBlockingQueue<>(1024);
+        this.pikachuPool = pikachuPool;
     }
 
+    protected boolean putWorker(Worker worker) {
+        return workerQueue.offer(worker);
+    }
+
+
     public void start() {
-//        this.worker.start();
-        for (Worker worker : workers) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        select(worker);
-                    } catch (Exception e) {
-                        log.error("connect error", e);
-                        throw new SimpleException("connect error", e);
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Worker worker = workerQueue.poll();
+                    if (null != worker) {
+                        pikachuPool.execute(() -> {
+                            try {
+                                select(worker);
+                            } catch (Exception e) {
+                                log.error("core error", e);
+                            }
+                        });
                     }
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                    log.error("core error", e);
                 }
-            }).start();
-        }
+            }
+        }).start();
     }
 
     public synchronized void select(Worker worker) throws Exception {
