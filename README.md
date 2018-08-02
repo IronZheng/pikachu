@@ -25,8 +25,11 @@ mvn clean install
 ### 注解说明
 @MathUrl 类注解，里面有两个参数，url是目标数据的url地址，请填写完善。method是请求方式。
 
-@CssPath 方法注解，使用XPath语法。 Xpath是一门在 XML 文档中查找信息的语言。速度比较快,是爬虫在网页定位中的较优选择。
+@CssPath 方法注解，使用select语法。 
 
+@Xpath 方法注解，使用xpath语法。Xpath是一门在 XML 文档中查找信息的语言。
+
+两种不同的注解可以一起使用。
 字段名 自定义即可。
 
 ```java

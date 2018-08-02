@@ -2,6 +2,7 @@ package com.pikachu.core.worker;
 
 import com.pikachu.core.annotations.CssPath;
 import com.pikachu.core.annotations.MathUrl;
+import com.pikachu.core.annotations.Xpath;
 import com.pikachu.core.exception.SimpleException;
 import com.pikachu.core.pipeline.Pipeline;
 import org.slf4j.Logger;
@@ -49,9 +50,17 @@ public class Worker extends DynamicBean {
                 if (fieldHasAnno) {
                     CssPath cssPath = field.getAnnotation(CssPath.class);
                     //输出注解属性
-                    Target t = new Target(field.getName(), field.getType().toString(), cssPath.selector());
+                    Target t = new Target(field.getName(), field.getType().toString(), cssPath.selector(), null);
                     attr.put(field.getName(), t);
                     log.debug(field.getName() + ":" + field.getType().toString() + ":" + cssPath.selector());
+                }
+                boolean fieldHasXpath = field.isAnnotationPresent(Xpath.class);
+                if (fieldHasXpath) {
+                    Xpath xpath = field.getAnnotation(Xpath.class);
+                    //输出注解属性
+                    Target t = new Target(field.getName(), field.getType().toString(), null, xpath.xpath());
+                    attr.put(field.getName(), t);
+                    log.debug(field.getName() + ":" + field.getType().toString() + ":" + xpath.xpath());
                 }
             }
         } catch (Exception e) {

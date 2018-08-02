@@ -5,19 +5,25 @@ import com.pikachu.core.annotations.MathUrl;
 import com.pikachu.core.exception.SimpleException;
 import com.pikachu.core.worker.Target;
 import com.pikachu.core.worker.Worker;
+import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.DomSerializer;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.TagNode;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.omg.IOP.TAG_RMI_CUSTOM_MAX_STREAM_FORMAT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import javax.management.ObjectName;
-import java.io.IOException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @author : iron
@@ -53,9 +59,11 @@ public class PikachuCore {
         }
     }
 
-    public synchronized void select(Worker worker) throws IOException {
+    public synchronized void select(Worker worker) throws Exception {
         if (MathUrl.Method.GET.equals(worker.getMethod())) {
-            doc = Jsoup.connect(worker.getUrl()).get();
+            doc = Jsoup.connect(worker.getUrl())
+                    .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
+                    .get();
         } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
             doc = Jsoup.connect(worker.getUrl()).post();
         }
@@ -63,12 +71,24 @@ public class PikachuCore {
             worker.getPipeline().output(null);
         }
 
-        Map<String,Object> target = new HashMap<>();
+        Map<String, Object> target = new HashMap<>();
         for (Map.Entry<String, Target> attr : worker.getAttr().entrySet()) {
-            Elements elements = doc.select(attr.getValue().getSelector());
-            target.put(attr.getValue().getName(),elements.toString());
+            if (null != attr.getValue().getSelector()) {
+
+                Elements elements = doc.select(attr.getValue().getSelector());
+                target.put(attr.getValue().getName(), elements.toString());
+
+            }
+            if (null != attr.getValue().getXpath()) {
+                HtmlCleaner hc = new HtmlCleaner();
+                TagNode tn = hc.clean(doc.body().html());
+                org.w3c.dom.Document dom = new DomSerializer(new CleanerProperties()).createDOM(tn);
+                XPath xPath = XPathFactory.newInstance().newXPath();
+                NodeList result = (NodeList) xPath.evaluate(attr.getValue().getXpath(),
+                        dom, XPathConstants.NODESET);
+                target.put(attr.getValue().getName(), result);
+            }
         }
-        String json = JSON.toJSONString(target);
-        worker.getPipeline().output(json);
+        worker.getPipeline().output(target);
     }
 }

@@ -1,5 +1,6 @@
 import com.pikachu.core.annotations.CssPath;
 import com.pikachu.core.annotations.MathUrl;
+import com.pikachu.core.annotations.Xpath;
 
 import java.util.List;
 
@@ -8,17 +9,12 @@ import java.util.List;
  * @create 2018-04-24 17:12
  **/
 
-@MathUrl(url = "http://www.meizitu.com/tag/quanluo_4_1.html", method = MathUrl.Method.GET)
+@MathUrl(url = "https://book.douban.com/", method = MathUrl.Method.GET)
 public class TestBean {
 
-    @CssPath(selector = "#maincontent > div.inWrap > ul>li>div>div>a")
-    private List img;
+    @Xpath(xpath = "//*[@id=\"content\"]/div/div[1]/div[1]/div[2]/div/div/ul/li/node()")
+    private String img;
 
-    public List getTitle() {
-        return img;
-    }
-
-    public void setTitle(List list) {
-        this.img = list;
-    }
+    @CssPath(selector = "#content > div > div.article > div.section.books-express > div.bd > div > div > ul:nth-child(2) > li > div.cover > a")
+    private String title;
 }

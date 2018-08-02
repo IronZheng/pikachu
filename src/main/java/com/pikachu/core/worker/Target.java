@@ -10,11 +10,13 @@ public class Target {
     private String name;
     private String type;
     private String selector;
+    private String xpath;
 
-    public Target(String name, String type, String selector) {
+    public Target(String name, String type, String selector,String xpath) {
         this.name = name;
         this.type = type;
         this.selector = selector;
+        this.xpath=xpath;
     }
 
     public String getType() {
@@ -41,12 +43,21 @@ public class Target {
         this.name = name;
     }
 
+    public String getXpath() {
+        return xpath;
+    }
+
+    public void setXpath(String xpath) {
+        this.xpath = xpath;
+    }
+
     @Override
     public String toString() {
         return "Target{" +
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 ", selector='" + selector + '\'' +
+                ", xpath='" + xpath + '\'' +
                 '}';
     }
 }
