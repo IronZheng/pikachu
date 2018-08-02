@@ -1,4 +1,4 @@
-import com.pikachu.core.pipeline.Pipeline;
+import com.pikachu.core.pipeline.BasePipeline;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -10,7 +10,7 @@ import java.util.Map;
  * @date : 下午5:03 2018/8/1
  */
 
-public class TestPipeline extends Pipeline<TestBean> {
+public class TestPipeline extends BasePipeline<TestBean> {
 
 
     public TestPipeline(TestBean testBean) {

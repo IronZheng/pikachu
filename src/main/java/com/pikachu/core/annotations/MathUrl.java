@@ -8,7 +8,15 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MathUrl {
-    enum Method {GET, POST}
+    enum Method {
+        /**
+         * GET请求方法
+         */
+        GET,
+        /**
+         * post请求方法
+         */
+        POST}
 
     String url() default "";
 

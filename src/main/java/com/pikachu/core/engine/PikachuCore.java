@@ -86,7 +86,7 @@ public class PikachuCore {
             worker.getPipeline().output(null);
         }
 
-        Map<String, Object> target = new HashMap<>();
+        Map<String, Object> target = new HashMap<>(16);
         HtmlCleaner hc = new HtmlCleaner();
         TagNode tn = hc.clean(doc.body().html());
         org.w3c.dom.Document dom = new DomSerializer(new CleanerProperties()).createDOM(tn);

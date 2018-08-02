@@ -4,7 +4,7 @@ import com.pikachu.core.annotations.CssPath;
 import com.pikachu.core.annotations.MathUrl;
 import com.pikachu.core.annotations.Xpath;
 import com.pikachu.core.exception.SimpleException;
-import com.pikachu.core.pipeline.Pipeline;
+import com.pikachu.core.pipeline.BasePipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +17,10 @@ import java.util.HashMap;
  **/
 
 
-public class Worker extends DynamicBean {
+public class Worker extends BaseDynamicBean {
     private final static Logger log = LoggerFactory.getLogger(Worker.class);
     private MathUrl.Method method;
-    private Pipeline pipeline;
+    private BasePipeline pipeline;
 
     public Worker(String id, Class<?> bean) {
         this.id = id;
@@ -42,7 +42,7 @@ public class Worker extends DynamicBean {
     }
 
     public Worker attr(Class<?> bean) {
-        attr = new HashMap<>();
+        attr = new HashMap<>(16);
         try {
             Field[] fields = bean.getDeclaredFields();
             for (Field field : fields) {
@@ -70,7 +70,7 @@ public class Worker extends DynamicBean {
         return this;
     }
 
-    public Worker addPipeline(Pipeline pipeline) {
+    public Worker addPipeline(BasePipeline pipeline) {
         this.pipeline = pipeline;
         return this;
     }
@@ -103,11 +103,11 @@ public class Worker extends DynamicBean {
         this.method = method;
     }
 
-    public Pipeline getPipeline() {
+    public BasePipeline getPipeline() {
         return pipeline;
     }
 
-    public void setPipeline(Pipeline pipeline) {
+    public void setPipeline(BasePipeline pipeline) {
         this.pipeline = pipeline;
     }
 }

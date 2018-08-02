@@ -8,7 +8,7 @@ import java.util.Map;
  **/
 
 
-public abstract class DynamicBean {
+public abstract class BaseDynamicBean {
     public String id;
     public String url;
     public Map<String, Target> attr;

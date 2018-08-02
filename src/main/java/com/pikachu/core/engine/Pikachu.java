@@ -1,17 +1,12 @@
 package com.pikachu.core.engine;
 
 import com.pikachu.core.exception.SimpleException;
-import com.pikachu.core.pipeline.Pipeline;
 import com.pikachu.core.worker.Worker;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -28,10 +23,15 @@ public class Pikachu {
     private List<Worker> workerList;
 
     private ExecutorService pikachuPool;
-    // 默认最大线程数
+
+    /**
+     * 默认最大线程数
+     */
     private Integer maxThreadNum = 10;
 
-    // 默认核心线程数
+    /**
+     * 默认核心线程数
+     */
     private Integer coreNum = 3;
 
     private PikachuCore core;
@@ -53,7 +53,7 @@ public class Pikachu {
                 new LinkedBlockingDeque<>(1024), new PiakchuFactory("pikachu")
                 , new ThreadPoolExecutor.AbortPolicy());
 
-        core = new PikachuCore(workerList,pikachuPool);
+        core = new PikachuCore(workerList, pikachuPool);
         return this;
     }
 

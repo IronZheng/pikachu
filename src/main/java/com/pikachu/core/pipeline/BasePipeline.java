@@ -7,14 +7,18 @@ import java.util.Map;
  * @create 2018-04-25 13:36
  **/
 
-public abstract class Pipeline<T> {
+public abstract class BasePipeline<T> {
 
     private T bean;
 
-    public Pipeline(T t) {
+    public BasePipeline(T t) {
         this.bean = t;
     }
 
+    /**
+     * out
+     * @param result
+     */
     public abstract void output(Map<String, Object> result);
 
     public T getBean() {
