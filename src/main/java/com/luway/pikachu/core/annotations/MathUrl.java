@@ -1,4 +1,4 @@
-package com.pikachu.core.annotations;
+package com.luway.pikachu.core.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package com.pikachu.core.exception;
+package com.luway.pikachu.core.exception;
 
 /**
  * @author zhenggm

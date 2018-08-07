@@ -1,4 +1,4 @@
-package com.pikachu.core.worker;
+package com.luway.pikachu.core.worker;
 
 import org.apache.commons.lang3.RandomStringUtils;
 

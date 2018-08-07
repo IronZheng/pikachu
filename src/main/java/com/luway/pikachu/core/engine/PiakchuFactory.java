@@ -1,6 +1,4 @@
-package com.pikachu.core.engine;
-
-import com.pikachu.core.exception.SimpleException;
+package com.luway.pikachu.core.engine;
 
 import java.util.*;
 import java.util.concurrent.ThreadFactory;

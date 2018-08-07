@@ -1,10 +1,8 @@
-package com.pikachu.core.engine;
+package com.luway.pikachu.core.engine;
 
-import com.alibaba.fastjson.JSON;
-import com.pikachu.core.annotations.MathUrl;
-import com.pikachu.core.exception.SimpleException;
-import com.pikachu.core.worker.Target;
-import com.pikachu.core.worker.Worker;
+import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.worker.Target;
+import com.luway.pikachu.core.worker.Worker;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
@@ -14,7 +12,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;

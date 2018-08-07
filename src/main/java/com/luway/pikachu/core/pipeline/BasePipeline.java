@@ -1,4 +1,4 @@
-package com.pikachu.core.pipeline;
+package com.luway.pikachu.core.pipeline;
 
 import java.util.Map;
 

@@ -1,5 +1,5 @@
-import com.pikachu.core.engine.Pikachu;
-import com.pikachu.core.worker.Worker;
+import com.luway.pikachu.core.engine.Pikachu;
+import com.luway.pikachu.core.worker.Worker;
 
 
 /**
