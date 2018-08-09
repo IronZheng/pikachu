@@ -40,7 +40,7 @@ public class PikachuCore {
 
     public PikachuCore(List<Worker> workers, ExecutorService pikachuPool) {
         this.workers = workers;
-        this.workerQueue = new ArrayBlockingQueue<>(1024);
+        this.workerQueue = new ArrayBlockingQueue<Worker>(1024);
         this.pikachuPool = pikachuPool;
     }
 

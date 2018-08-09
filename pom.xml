@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>7</version>
     </parent>
-    
-    <groupId>com.luway</groupId>
+
+    <groupId>cn.luway</groupId>
     <artifactId>pikachu</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <packaging>jar</packaging>
+    <version>1.0.1-sonatype</version>
 
     <properties>
         <powermock.version>1.6.5</powermock.version>
         <log4j.version>2.5</log4j.version>
+        <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
     </properties>
     <dependencies>
         <dependency>
@@ -46,11 +47,6 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.10.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.goeasy</groupId>
-            <artifactId>goeasy-sdk</artifactId>
-            <version>0.3.8</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
@@ -100,86 +96,118 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.38</version>
-        </dependency>
         <dependency>
             <groupId>net.sourceforge.htmlcleaner</groupId>
             <artifactId>htmlcleaner</artifactId>
             <version>2.9</version>
         </dependency>
+        <dependency>
+            <groupId>com.perforce.p4maven</groupId>
+            <artifactId>p4maven-provider</artifactId>
+            <version>1.0.6</version>
+        </dependency>
     </dependencies>
-    <build>
-        <pluginManagement>
-        <plugins>
 
+    <distributionManagement>
+        <repository>
+            <id>repository</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+
+    </distributionManagement>
+
+    <build>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
-        </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-source-plugin</artifactId>
+                            <version>2.2.1</version>
+                            <executions>
+                                <execution>
+                                    <id>attach-sources</id>
+                                    <phase>deploy</phase>
+                                    <goals>
+                                        <goal>jar-no-fork</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>2.9.1</version>
+                            <executions>
+                                <execution>
+                                    <id>attach-javadocs</id>
+                                    <phase>deploy</phase>
+                                    <goals>
+                                        <goal>jar</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-gpg-plugin</artifactId>
+                            <version>1.5</version>
+                            <executions>
+                                <execution>
+                                    <id>sign-artifacts</id>
+                                    <phase>verify</phase>
+                                    <goals>
+                                        <goal>sign</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <!-- explicitly define maven-deploy-plugin after other to force exec
+                                order -->
+                            <artifactId>maven-deploy-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>deploy</id>
+                                    <phase>deploy</phase>
+                                    <goals>
+                                        <goal>deploy</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>
             <id>clojars.org</id>
             <url>http://clojars.org/repo</url>
         </repository>
-        <repository>
-            <id>goeasy</id>
-            <name>goeasy</name>
-            <url>http://maven.goeasy.io/content/repositories/releases/</url>
-        </repository>
+
     </repositories>
 
     <licenses>
@@ -191,16 +219,16 @@
     </licenses>
 
     <scm>
-        <url>https://gitee.com/ironzheng/pikachu</url>
+        <url>https://gitee.com/ironzheng/pikachu.git</url>
         <connection>https://gitee.com/ironzheng/pikachu.git</connection>
-        <developerConnection>https://www.luway.com</developerConnection>
+        <developerConnection>http://pikachu.luway.cn</developerConnection>
     </scm>
 
     <developers>
         <developer>
             <name>zhenggangmin</name>
             <email>389093062@qq.com</email>
-            <url>https://www.luway.com</url>
+            <url>http://pikachu.luway.cn</url>
         </developer>
     </developers>
 </project>

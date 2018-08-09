@@ -42,7 +42,7 @@ public class Worker extends BaseDynamicBean {
     }
 
     public Worker attr(Class<?> bean) {
-        attr = new HashMap<>(16);
+        attr = new HashMap<String, Target>(16);
         try {
             Field[] fields = bean.getDeclaredFields();
             for (Field field : fields) {

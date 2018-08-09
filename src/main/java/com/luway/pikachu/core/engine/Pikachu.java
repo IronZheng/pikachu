@@ -46,7 +46,7 @@ public class Pikachu {
      * @return
      */
     public Pikachu init() {
-        workerList = new ArrayList<>();
+        workerList = new ArrayList<Worker>();
 
         pikachuPool = new ThreadPoolExecutor(
                 coreNum, maxThreadNum, 0L, TimeUnit.SECONDS,
