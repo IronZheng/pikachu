@@ -14,4 +14,5 @@ public class TestBean {
 
     @CssPath(selector = "#app > div:nth-child(3) > div > div.van-tabbar-item.van-tabbar-item--active > div.van-tabbar-item__text")
     private String title;
+
 }

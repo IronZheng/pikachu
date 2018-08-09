@@ -7,6 +7,21 @@
 
 持续开发中。。
 
+### 1.0.1 升级版来啦
+升级版中做了对xpath和css select的注解支持。同时优化了核心处理逻辑。使得任务的安排更加有序。
+同时项目已经发布至中央仓库，可以直接添加依赖,即可快速开发。
+
+```$xml
+        <dependency>
+            <groupId>cn.luway</groupId>
+            <artifactId>pikachu</artifactId>
+            <version>1.0.1-sonatype</version>
+        </dependency>
+```
+正打算推出几个小例子，方便大家更好的使用pikachu。
+还有很多地方需要优化。
+
+
 ### 1.0.0 版本 第一版
 
 第一版其实没有太多东西，非常简单地封装了下爬虫引擎和抓取对象bean。存在很多的不足，需要改进。也欢迎大家给我多提点意见。
