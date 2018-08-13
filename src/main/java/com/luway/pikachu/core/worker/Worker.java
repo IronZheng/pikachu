@@ -20,6 +20,7 @@ import java.util.HashMap;
 public class Worker extends BaseDynamicBean {
     private final static Logger log = LoggerFactory.getLogger(Worker.class);
     private MathUrl.Method method;
+    private boolean loadJs;
     private BasePipeline pipeline;
 
     public Worker(String id, Class<?> bean) {
@@ -38,6 +39,7 @@ public class Worker extends BaseDynamicBean {
             throw new RuntimeException("[error] url can not be null");
         }
         this.method = u.method();
+        this.loadJs = u.loadJs();
         return attr(bean);
     }
 
@@ -109,5 +111,13 @@ public class Worker extends BaseDynamicBean {
 
     public void setPipeline(BasePipeline pipeline) {
         this.pipeline = pipeline;
+    }
+
+    public boolean isLoadJs() {
+        return loadJs;
+    }
+
+    public void setLoadJs(boolean loadJs) {
+        this.loadJs = loadJs;
     }
 }

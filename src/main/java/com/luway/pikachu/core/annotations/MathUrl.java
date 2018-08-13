@@ -21,4 +21,6 @@ public @interface MathUrl {
     String url() default "";
 
     Method method() default Method.GET;
+
+    boolean loadJs() default false;
 }

@@ -20,7 +20,7 @@ public class TestPikachu {
                         .addPipeline(new TestPipeline(new TestBean())));
 
         pikachu.start();
-        pikachu.stop();
+//        pikachu.stop();
     }
 
 }

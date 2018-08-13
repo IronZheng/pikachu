@@ -61,11 +61,13 @@ public class Pikachu {
             throw new SimpleException("worker is null");
         }
         workerList.add(worker);
-
         core.putWorker(worker);
         return this;
     }
 
+    /**
+     * start pikachu
+     */
     public void start() {
         if (null == core) {
             throw new SimpleException("pikachu核心未初始化,请先初始化引擎");
@@ -78,9 +80,21 @@ public class Pikachu {
         core.start();
     }
 
+    /**
+     * 这将会直接关闭所有任务，不管有没有执行完成。
+     */
     public void stop() {
         logger.debug("pikachu stop ...");
         core.stop();
+    }
+
+    /**
+     * 在所有任务都结束且设置的时间内没有新任务则结束爬虫线程。
+     * 推荐使用
+     * @param time
+     */
+    public void stopAfterTime(Long time){
+        core.stopAfterTime(time);
     }
 
     public Pikachu setMaxThreadNum(Integer maxThreadNum) {

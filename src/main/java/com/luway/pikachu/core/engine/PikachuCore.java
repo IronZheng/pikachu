@@ -1,5 +1,8 @@
 package com.luway.pikachu.core.engine;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.worker.Target;
 import com.luway.pikachu.core.worker.Worker;
@@ -17,6 +20,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -30,17 +34,18 @@ import java.util.concurrent.ExecutorService;
 public class PikachuCore {
     private final static Logger log = LoggerFactory.getLogger(Pikachu.class);
     private Document doc;
-    private List<Worker> workers;
     private volatile Boolean flag = true;
+    private volatile Long currentTime;
+    private Long stopTime;
 
     private Queue<Worker> workerQueue;
 
     private ExecutorService pikachuPool;
 
     public PikachuCore(List<Worker> workers, ExecutorService pikachuPool) {
-        this.workers = workers;
-        this.workerQueue = new ArrayBlockingQueue<Worker>(1024);
+        this.workerQueue = new ArrayBlockingQueue<>(1024);
         this.pikachuPool = pikachuPool;
+        currentTime = System.currentTimeMillis();
     }
 
     protected boolean putWorker(Worker worker) {
@@ -56,11 +61,14 @@ public class PikachuCore {
                     if (null != worker) {
                         pikachuPool.execute(() -> {
                             try {
-                                select(worker);
+                                load(worker);
                             } catch (Exception e) {
                                 log.error("core error", e);
                             }
                         });
+                        currentTime = System.currentTimeMillis();
+                    } else {
+                        judgeTime();
                     }
                     Thread.sleep(500);
                 } catch (Exception e) {
@@ -70,7 +78,37 @@ public class PikachuCore {
         }).start();
     }
 
-    public synchronized void select(Worker worker) throws Exception {
+    public synchronized void load(Worker worker) throws Exception {
+
+        if (worker.isLoadJs()) {
+            loadJs(worker);
+        } else {
+            loadHtml(worker);
+        }
+    }
+
+    private void loadJs(Worker worker) throws Exception {
+        // HtmlUnit 模拟浏览器
+        WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        // 启用JS解释器，默认为true
+        webClient.getOptions().setJavaScriptEnabled(true);
+        // 禁用css支持
+        webClient.getOptions().setCssEnabled(false);
+        // js运行错误时，是否抛出异常
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        // 设置连接超时时间
+        webClient.getOptions().setTimeout(10 * 1000);
+        HtmlPage page = webClient.getPage(worker.getUrl());
+        // 等待js后台执行30秒
+        webClient.waitForBackgroundJavaScript(30 * 1000);
+        String pageAsXml = page.asXml();
+        // Jsoup解析处理
+        Document doc = Jsoup.parse(pageAsXml, worker.getUrl());
+        select(doc, worker);
+    }
+
+    private void loadHtml(Worker worker) throws Exception {
         if (MathUrl.Method.GET.equals(worker.getMethod())) {
             doc = Jsoup.connect(worker.getUrl())
                     .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
@@ -81,6 +119,10 @@ public class PikachuCore {
         if (doc == null) {
             worker.getPipeline().output(null);
         }
+        select(doc, worker);
+    }
+
+    private void select(Document doc, Worker worker) throws Exception {
 
         Map<String, Object> target = new HashMap<>(16);
         HtmlCleaner hc = new HtmlCleaner();
@@ -104,5 +146,16 @@ public class PikachuCore {
 
     public void stop() {
         this.flag = false;
+    }
+
+    public void stopAfterTime(Long time) {
+        this.stopTime = time;
+    }
+
+    private void judgeTime() {
+        Long nowDate = System.currentTimeMillis();
+        if ((nowDate - currentTime) > (stopTime * 1000)) {
+            this.stop();
+        }
     }
 }

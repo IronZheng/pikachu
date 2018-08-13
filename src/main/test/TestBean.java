@@ -6,7 +6,7 @@ import com.luway.pikachu.core.annotations.MathUrl;
  * @create 2018-04-24 17:12
  **/
 
-@MathUrl(url = "https://limengke123.github.io/", method = MathUrl.Method.GET)
+@MathUrl(url = "https://limengke123.github.io/#/", method = MathUrl.Method.GET,loadJs = true)
 public class TestBean {
 
 //    @Xpath(xpath = "//*[@id=\"content\"]/div/div[1]/div[1]/div[2]/div/div/ul/li/node()")
