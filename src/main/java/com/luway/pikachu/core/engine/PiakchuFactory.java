@@ -14,7 +14,7 @@ public class PiakchuFactory implements ThreadFactory {
 
     private int counter;
     private String name;
-    private List<String> stats;
+    private static List<String> stats;
 
     public PiakchuFactory(String name) {
         counter = 0;
@@ -23,7 +23,7 @@ public class PiakchuFactory implements ThreadFactory {
     }
 
 
-    public String getStas() {
+    public static String getStas() {
         StringBuffer buffer = new StringBuffer();
         Iterator<String> it = stats.iterator();
         while (it.hasNext()) {

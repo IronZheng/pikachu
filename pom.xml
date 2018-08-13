@@ -12,7 +12,7 @@
     <groupId>cn.luway</groupId>
     <artifactId>pikachu</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1-sonatype</version>
+    <version>1.0.2-snapshot</version>
 
     <properties>
         <powermock.version>1.6.5</powermock.version>

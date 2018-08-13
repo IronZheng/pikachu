@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  **/
 
 public class Pikachu {
-    private final static Logger log = LoggerFactory.getLogger(Pikachu.class);
+    private final static Logger logger = LoggerFactory.getLogger(Pikachu.class);
     private String name;
     private List<Worker> workerList;
 
@@ -47,13 +47,12 @@ public class Pikachu {
      */
     public Pikachu init() {
         workerList = new ArrayList<Worker>();
-
         pikachuPool = new ThreadPoolExecutor(
                 coreNum, maxThreadNum, 0L, TimeUnit.SECONDS,
                 new LinkedBlockingDeque<>(1024), new PiakchuFactory("pikachu")
                 , new ThreadPoolExecutor.AbortPolicy());
-
         core = new PikachuCore(workerList, pikachuPool);
+        logger.debug("pikachu init ...");
         return this;
     }
 
@@ -80,7 +79,8 @@ public class Pikachu {
     }
 
     public void stop() {
-
+        logger.debug("pikachu stop ...");
+        core.stop();
     }
 
     public Pikachu setMaxThreadNum(Integer maxThreadNum) {

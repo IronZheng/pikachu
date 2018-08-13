@@ -29,10 +29,9 @@ import java.util.concurrent.ExecutorService;
 
 public class PikachuCore {
     private final static Logger log = LoggerFactory.getLogger(Pikachu.class);
-    private Integer maxThreadNum;
-    private Integer coreNum;
     private Document doc;
     private List<Worker> workers;
+    private volatile Boolean flag = true;
 
     private Queue<Worker> workerQueue;
 
@@ -51,7 +50,7 @@ public class PikachuCore {
 
     public void start() {
         new Thread(() -> {
-            while (true) {
+            while (flag) {
                 try {
                     Worker worker = workerQueue.poll();
                     if (null != worker) {
@@ -101,5 +100,9 @@ public class PikachuCore {
             }
         }
         worker.getPipeline().output(target);
+    }
+
+    public void stop() {
+        this.flag = false;
     }
 }
