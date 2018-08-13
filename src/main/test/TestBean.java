@@ -6,13 +6,13 @@ import com.luway.pikachu.core.annotations.MathUrl;
  * @create 2018-04-24 17:12
  **/
 
-@MathUrl(url = "https://limengke123.github.io/#/", method = MathUrl.Method.GET,loadJs = true)
+@MathUrl(url = "https://movie.douban.com/cinema/nowplaying/hangzhou/", method = MathUrl.Method.GET)
 public class TestBean {
 
 //    @Xpath(xpath = "//*[@id=\"content\"]/div/div[1]/div[1]/div[2]/div/div/ul/li/node()")
 //    private String img;
 
-    @CssPath(selector = "#app > div:nth-child(3) > div > div.van-tabbar-item.van-tabbar-item--active > div.van-tabbar-item__text")
+    @CssPath(selector = "#nowplaying > .mod-bd>ul >li>ul> .stitle")
     private String title;
 
 }

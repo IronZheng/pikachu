@@ -89,20 +89,18 @@ public class PikachuCore {
 
     private void loadJs(Worker worker) throws Exception {
         // HtmlUnit 模拟浏览器
-        WebClient webClient = new WebClient(BrowserVersion.CHROME);
-        // 启用JS解释器，默认为true
-        webClient.getOptions().setJavaScriptEnabled(true);
-        // 禁用css支持
-        webClient.getOptions().setCssEnabled(false);
-        // js运行错误时，是否抛出异常
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        // 设置连接超时时间
-        webClient.getOptions().setTimeout(10 * 1000);
-        HtmlPage page = webClient.getPage(worker.getUrl());
-        // 等待js后台执行30秒
-        webClient.waitForBackgroundJavaScript(30 * 1000);
+        WebClient wc = new WebClient(BrowserVersion.FIREFOX_52);
+        wc.setJavaScriptTimeout(5000);
+        wc.getOptions().setUseInsecureSSL(true);//接受任何主机连接 无论是否有有效证书
+        wc.getOptions().setJavaScriptEnabled(true);//设置支持javascript脚本
+        wc.getOptions().setCssEnabled(false);//禁用css支持
+        wc.getOptions().setThrowExceptionOnScriptError(false);//js运行错误时不抛出异常
+        wc.getOptions().setTimeout(100000);//设置连接超时时间
+        wc.getOptions().setDoNotTrackEnabled(false);
+        HtmlPage page = wc.getPage(worker.getUrl());
+
         String pageAsXml = page.asXml();
+
         // Jsoup解析处理
         Document doc = Jsoup.parse(pageAsXml, worker.getUrl());
         select(doc, worker);
@@ -146,6 +144,7 @@ public class PikachuCore {
 
     public void stop() {
         this.flag = false;
+        pikachuPool.shutdown();
     }
 
     public void stopAfterTime(Long time) {

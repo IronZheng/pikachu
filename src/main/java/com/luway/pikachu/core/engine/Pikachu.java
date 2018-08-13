@@ -81,7 +81,7 @@ public class Pikachu {
     }
 
     /**
-     * 这将会直接关闭所有任务，不管有没有执行完成。
+     * 关闭线程池，等当前任务全部执行完毕。
      */
     public void stop() {
         logger.debug("pikachu stop ...");
