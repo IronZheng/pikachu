@@ -7,6 +7,8 @@
 
 持续开发中。。
 
+github：https://github.com/Steelzheng/pikachu
+开源中国：https://gitee.com/ironzheng/pikachu
 ### 1.0.1 升级版来啦
 升级版中做了对xpath和css select的注解支持。同时优化了核心处理逻辑。使得任务的安排更加有序。
 同时项目已经发布至中央仓库，可以直接添加依赖,即可快速开发。
