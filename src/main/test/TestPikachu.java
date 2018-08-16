@@ -1,5 +1,8 @@
 import com.luway.pikachu.core.engine.Pikachu;
+import com.luway.pikachu.core.pipeline.BasePipeline;
 import com.luway.pikachu.core.worker.Worker;
+
+import java.util.Map;
 
 
 /**
@@ -21,6 +24,12 @@ public class TestPikachu {
 
         pikachu.start();
         pikachu.stopAfterTime(30L);
+        pikachu.regist(new Worker("1",TestBean.class).addPipeline(new BasePipeline(TestBean.class) {
+            @Override
+            public void output(Map result) {
+
+            }
+        }));
     }
 
 }
