@@ -14,11 +14,11 @@ github：https://github.com/Steelzheng/pikachu
 同时项目已经发布至中央仓库，可以直接添加依赖,即可快速开发。
 
 ```$xml
-        <dependency>
-            <groupId>cn.luway</groupId>
-            <artifactId>pikachu</artifactId>
-            <version>1.0.1-sonatype</version>
-        </dependency>
+      <dependency>
+        <groupId>cn.luway</groupId>
+        <artifactId>pikachu</artifactId>
+        <version>1.0.2-snapshot</version>
+      </dependency>
 ```
 正打算推出几个小例子，方便大家更好的使用pikachu。
 还有很多地方需要优化。
