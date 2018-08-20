@@ -54,28 +54,32 @@ public class PikachuCore {
 
 
     public void start() {
-        new Thread(() -> {
-            while (flag) {
-                try {
-                    Worker worker = workerQueue.poll();
-                    if (null != worker) {
-                        pikachuPool.execute(() -> {
-                            try {
-                                load(worker);
-                            } catch (Exception e) {
-                                log.error("core error", e);
-                            }
-                        });
-                        currentTime = System.currentTimeMillis();
-                    } else {
-                        judgeTime();
+        pikachuPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                while (flag) {
+                    try {
+                        Worker worker = workerQueue.poll();
+                        if (null != worker) {
+                            pikachuPool.execute(() -> {
+                                try {
+                                    load(worker);
+                                } catch (Exception e) {
+                                    log.error("core error", e);
+                                }
+                            });
+                            currentTime = System.currentTimeMillis();
+                        } else {
+                            judgeTime();
+                        }
+                        Thread.sleep(500);
+                    } catch (Exception e) {
+                        log.error("core error", e);
+                        stop();
                     }
-                    Thread.sleep(500);
-                } catch (Exception e) {
-                    log.error("core error", e);
                 }
             }
-        }).start();
+        });
     }
 
     public synchronized void load(Worker worker) throws Exception {
@@ -100,7 +104,6 @@ public class PikachuCore {
         HtmlPage page = wc.getPage(worker.getUrl());
 
         String pageAsXml = page.asXml();
-
         // Jsoup解析处理
         Document doc = Jsoup.parse(pageAsXml, worker.getUrl());
         select(doc, worker);
@@ -127,7 +130,6 @@ public class PikachuCore {
         TagNode tn = hc.clean(doc.body().html());
         org.w3c.dom.Document dom = new DomSerializer(new CleanerProperties()).createDOM(tn);
         XPath xPath = XPathFactory.newInstance().newXPath();
-
         for (Map.Entry<String, Target> attr : worker.getAttr().entrySet()) {
             if (null != attr.getValue().getSelector()) {
                 Elements elements = doc.select(attr.getValue().getSelector());
