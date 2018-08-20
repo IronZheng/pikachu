@@ -42,7 +42,7 @@ public class PikachuCore {
 
     private ExecutorService pikachuPool;
 
-    public PikachuCore(List<Worker> workers, ExecutorService pikachuPool) {
+    public PikachuCore(ExecutorService pikachuPool) {
         this.workerQueue = new ArrayBlockingQueue<>(1024);
         this.pikachuPool = pikachuPool;
         currentTime = System.currentTimeMillis();
@@ -61,14 +61,19 @@ public class PikachuCore {
                     try {
                         Worker worker = workerQueue.poll();
                         if (null != worker) {
-                            pikachuPool.execute(() -> {
-                                try {
-                                    load(worker);
-                                } catch (Exception e) {
-                                    log.error("core error", e);
-                                }
-                            });
-                            currentTime = System.currentTimeMillis();
+                            if (worker.validate()) {
+                                pikachuPool.execute(() -> {
+                                    try {
+                                        load(worker);
+                                    } catch (Exception e) {
+                                        log.error("core error", e);
+                                    }
+                                });
+                                currentTime = System.currentTimeMillis();
+                            } else {
+                                log.error("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
+                                throw new Exception("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
+                            }
                         } else {
                             judgeTime();
                         }
@@ -113,9 +118,12 @@ public class PikachuCore {
         if (MathUrl.Method.GET.equals(worker.getMethod())) {
             doc = Jsoup.connect(worker.getUrl())
                     .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
+                    .cookies(worker.getCookies())
                     .get();
         } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
-            doc = Jsoup.connect(worker.getUrl()).post();
+            doc = Jsoup.connect(worker.getUrl())
+                    .cookies(worker.getCookies())
+                    .post();
         }
         if (doc == null) {
             worker.getPipeline().output(null);

@@ -3,6 +3,7 @@ package com.luway.pikachu.core.worker;
 import com.luway.pikachu.core.annotations.CssPath;
 import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.annotations.Xpath;
+import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.pipeline.BasePipeline;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author zhenggm
@@ -23,12 +25,21 @@ public class Worker extends BaseDynamicBean {
     private boolean loadJs;
     private BasePipeline pipeline;
 
+    // web cookies
+    private Map<String, String> cookies;
+
     public Worker(String id, Class<?> bean) {
         this.id = id;
         if (bean == null) {
             throw new RuntimeException("[error] class is null");
         }
+        this.cookies = new HashMap<>();
         load(bean);
+    }
+
+    public Worker cookies(Map<String, String> cookies) {
+        this.cookies = cookies;
+        return this;
     }
 
     private Worker load(Class<?> bean) {
@@ -77,6 +88,15 @@ public class Worker extends BaseDynamicBean {
         return this;
     }
 
+
+    public Boolean validate(){
+        if (pipeline==null){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
     @Override
     public void start() {
         if (null == pipeline) {
@@ -119,5 +139,9 @@ public class Worker extends BaseDynamicBean {
 
     public void setLoadJs(boolean loadJs) {
         this.loadJs = loadJs;
+    }
+
+    public Map<String, String> getCookies() {
+        return cookies;
     }
 }
