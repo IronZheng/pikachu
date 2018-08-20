@@ -1,4 +1,5 @@
 import com.luway.pikachu.core.engine.Pikachu;
+import com.luway.pikachu.core.engine.impl.PikachuImpl;
 import com.luway.pikachu.core.pipeline.BasePipeline;
 import com.luway.pikachu.core.worker.Worker;
 
@@ -15,7 +16,7 @@ public class TestPikachu {
 
     public static void main(String[] args) throws Exception {
 
-        Pikachu pikachu = new Pikachu("test")
+        Pikachu pikachu = new PikachuImpl("test")
                 .setCoreNum(5)
                 .setMaxThreadNum(20)
                 .init()

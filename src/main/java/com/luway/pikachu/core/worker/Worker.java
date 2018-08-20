@@ -3,7 +3,6 @@ package com.luway.pikachu.core.worker;
 import com.luway.pikachu.core.annotations.CssPath;
 import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.annotations.Xpath;
-import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.pipeline.BasePipeline;
 import org.slf4j.Logger;

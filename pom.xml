@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>cn.luway</groupId>
-    <artifactId>pikachu</artifactId>
+    <artifactId>pikachuImpl</artifactId>
     <packaging>jar</packaging>
     <version>1.0.2-snapshot</version>
 
@@ -252,16 +252,16 @@
     </licenses>
 
     <scm>
-        <url>https://gitee.com/ironzheng/pikachu.git</url>
-        <connection>https://gitee.com/ironzheng/pikachu.git</connection>
-        <developerConnection>http://pikachu.luway.cn</developerConnection>
+        <url>https://gitee.com/ironzheng/pikachuImpl.git</url>
+        <connection>https://gitee.com/ironzheng/pikachuImpl.git</connection>
+        <developerConnection>http://pikachuImpl.luway.cn</developerConnection>
     </scm>
 
     <developers>
         <developer>
             <name>zhenggangmin</name>
             <email>389093062@qq.com</email>
-            <url>http://pikachu.luway.cn</url>
+            <url>http://pikachuImpl.luway.cn</url>
         </developer>
     </developers>
 </project>

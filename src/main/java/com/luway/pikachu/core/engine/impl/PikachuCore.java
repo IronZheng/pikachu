@@ -1,4 +1,4 @@
-package com.luway.pikachu.core.engine;
+package com.luway.pikachu.core.engine.impl;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -20,7 +20,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -32,7 +31,7 @@ import java.util.concurrent.ExecutorService;
  */
 
 public class PikachuCore {
-    private final static Logger log = LoggerFactory.getLogger(Pikachu.class);
+    private final static Logger log = LoggerFactory.getLogger(PikachuImpl.class);
     private Document doc;
     private volatile Boolean flag = true;
     private volatile Long currentTime;

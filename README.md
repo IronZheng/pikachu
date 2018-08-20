@@ -1,4 +1,4 @@
-# pikachu
+# pikachuImpl
 皮卡丘，就决定是你了
 
 为什么取个名字叫皮卡丘，大概是这样萌一些。小哥哥是很可爱的。然后本项目是个爬虫项目，使用时候就像派出小精灵一样，派出皮卡丘，就会为你抓回对应的数据。
@@ -7,19 +7,25 @@
 
 持续开发中。。
 
-github：https://github.com/Steelzheng/pikachu
-开源中国：https://gitee.com/ironzheng/pikachu
-### 1.0.1 升级版来啦
-升级版中做了对xpath和css select的注解支持。同时优化了核心处理逻辑。使得任务的安排更加有序。
-同时项目已经发布至中央仓库，可以直接添加依赖,即可快速开发。
+github：https://github.com/Steelzheng/pikachuImpl
+开源中国：https://gitee.com/ironzheng/pikachuImpl
 
+中央仓库Maven，此处版本号为最新
 ```$xml
       <dependency>
         <groupId>cn.luway</groupId>
-        <artifactId>pikachu</artifactId>
+        <artifactId>pikachuImpl</artifactId>
         <version>1.0.2-snapshot</version>
       </dependency>
 ```
+
+### 1.0.3
+
+
+### 1.0.2 升级版来啦
+升级版中做了对xpath和css select的注解支持。同时优化了核心处理逻辑。使得任务的安排更加有序。
+同时项目已经发布至中央仓库，可以直接添加依赖,即可快速开发。
+
 正打算推出几个小例子，方便大家更好的使用pikachu。
 还有很多地方需要优化。
 
@@ -33,7 +39,7 @@ github：https://github.com/Steelzheng/pikachu
 ## 使用方式
 安装Java环境，clone 代码 
 ```$xslt
-git clone https://gitee.com/ironzheng/pikachu.git
+git clone https://gitee.com/ironzheng/pikachuImpl.git
 mvn clean install 
 ```
 

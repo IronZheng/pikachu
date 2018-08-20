@@ -1,5 +1,7 @@
 package com.luway.pikachu.core.engine;
 
+import com.luway.pikachu.core.engine.impl.PikachuImpl;
+
 import java.util.*;
 import java.util.concurrent.ThreadFactory;
 
@@ -7,16 +9,16 @@ import java.util.concurrent.ThreadFactory;
  * @author zhenggm
  * @create 2018-04-25 13:38
  **/
-public class PiakchuFactory implements ThreadFactory {
+public class PiakchuPoolFactory implements ThreadFactory {
     private Map<String, Pikachu> pcmMap = new HashMap<>();
-    private Pikachu pikachu;
+    private PikachuImpl pikachuImpl;
     private Boolean flag;
 
     private int counter;
     private String name;
     private static List<String> stats;
 
-    public PiakchuFactory(String name) {
+    public PiakchuPoolFactory(String name) {
         counter = 0;
         this.name = name;
         stats = new ArrayList<String>();
