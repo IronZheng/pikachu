@@ -1,12 +1,15 @@
 package com.luway.pikachu.core.engine.impl;
 
+import com.luway.pikachu.core.engine.AbstractTempMethod;
 import com.luway.pikachu.core.engine.PiakchuPoolFactory;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.Worker;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -112,4 +115,5 @@ public class PikachuImpl implements Pikachu {
         this.coreNum = coreNum;
         return this;
     }
+
 }

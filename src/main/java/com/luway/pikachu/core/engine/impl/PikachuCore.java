@@ -4,6 +4,7 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.engine.AbstractTempMethod;
 import com.luway.pikachu.core.worker.Target;
 import com.luway.pikachu.core.worker.Worker;
 import org.htmlcleaner.CleanerProperties;
@@ -20,6 +21,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -30,7 +32,7 @@ import java.util.concurrent.ExecutorService;
  * @date : 下午3:31 2018/8/1
  */
 
-public class PikachuCore {
+public class PikachuCore extends AbstractTempMethod {
     private final static Logger log = LoggerFactory.getLogger(PikachuImpl.class);
     private Document doc;
     private volatile Boolean flag = true;
@@ -131,7 +133,6 @@ public class PikachuCore {
     }
 
     private void select(Document doc, Worker worker) throws Exception {
-
         Map<String, Object> target = new HashMap<>(16);
         HtmlCleaner hc = new HtmlCleaner();
         TagNode tn = hc.clean(doc.body().html());
@@ -165,5 +166,33 @@ public class PikachuCore {
         if ((nowDate - currentTime) > (stopTime * 1000)) {
             this.stop();
         }
+    }
+
+    @Override
+    protected Document getConnect(String url, String method) throws IOException {
+        if (MathUrl.Method.GET.equals(method)) {
+            doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
+                    .get();
+        } else if (MathUrl.Method.POST.equals(method)) {
+            doc = Jsoup.connect(url)
+                    .post();
+        }
+        return doc;
+    }
+
+    @Override
+    protected Document getConnect(String url, String method, Map<String, String> cookies) throws IOException {
+        if (MathUrl.Method.GET.equals(method)) {
+            doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
+                    .cookies(cookies)
+                    .get();
+        } else if (MathUrl.Method.POST.equals(method)) {
+            doc = Jsoup.connect(url)
+                    .cookies(cookies)
+                    .post();
+        }
+        return doc;
     }
 }

@@ -13,44 +13,49 @@ public interface Pikachu {
 
     /**
      * 初始化爬虫核心程序
+     *
      * @return
      */
-    public Pikachu init();
+    Pikachu init();
 
     /**
      * 注册worker
+     *
      * @param worker
      * @return
      */
-    public PikachuImpl regist(Worker worker);
+    PikachuImpl regist(Worker worker);
 
     /**
      * 启动爬虫服务
      */
-    public void start();
+    void start();
 
     /**
      * 停止服务
      */
-    public void stop();
+    void stop();
 
     /**
      * 指定空闲多少时间之后，停止爬虫服务
+     *
      * @param time
      */
-    public void stopAfterTime(Long time);
+    void stopAfterTime(Long time);
 
     /**
+     * 设置最大线程数
      *
      * @param maxThreadNum
      * @return
      */
-    public PikachuImpl setMaxThreadNum(Integer maxThreadNum);
+    PikachuImpl setMaxThreadNum(Integer maxThreadNum);
 
     /**
+     * 设置核心线程数
      *
      * @param coreNum
      * @return
      */
-    public PikachuImpl setCoreNum(Integer coreNum);
+    PikachuImpl setCoreNum(Integer coreNum);
 }
