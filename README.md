@@ -14,7 +14,7 @@ github：https://github.com/Steelzheng/pikachuImpl
 ```$xml
       <dependency>
         <groupId>cn.luway</groupId>
-        <artifactId>pikachuImpl</artifactId>
+        <artifactId>pikachu</artifactId>
         <version>1.0.2-snapshot</version>
       </dependency>
 ```
