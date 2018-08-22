@@ -19,7 +19,9 @@ github：https://github.com/Steelzheng/pikachuImpl
       </dependency>
 ```
 
-### 1.0.3
+### 1.1.0 未发布
+增加cookies，可以对一些站点进行cookies参数验证，也就是模拟登陆。
+增加一些通用接口。
 
 
 ### 1.0.2 升级版来啦
