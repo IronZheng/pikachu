@@ -3,6 +3,8 @@ package com.luway.pikachu.core.engine;
 import com.luway.pikachu.core.engine.impl.PikachuImpl;
 import com.luway.pikachu.core.worker.Worker;
 
+import java.util.Queue;
+
 /**
  * @author : iron
  * @version : 1.0.0
@@ -58,4 +60,10 @@ public interface Pikachu {
      * @return
      */
     PikachuImpl setCoreNum(Integer coreNum);
+
+    /**
+     * 获取队列
+     * @return
+     */
+    Queue<Worker> getQueue();
 }

@@ -23,12 +23,13 @@ public class TestPikachu {
                 .regist(new Worker("test", TestBean.class)
                         .addPipeline(new TestPipeline(new TestBean())));
 
+
         pikachu.start();
         pikachu.stopAfterTime(30L);
         pikachu.regist(new Worker("1",TestBean.class).addPipeline(new BasePipeline(TestBean.class) {
             @Override
             public void output(Map result) {
-
+                System.out.println(result);
             }
         }));
     }

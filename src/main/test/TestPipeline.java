@@ -1,4 +1,5 @@
 import com.luway.pikachu.core.pipeline.BasePipeline;
+import com.luway.pikachu.core.worker.Worker;
 
 import java.util.Map;
 
@@ -34,4 +35,5 @@ public class TestPipeline extends BasePipeline<TestBean> {
         System.out.println(title);
 
     }
+
 }

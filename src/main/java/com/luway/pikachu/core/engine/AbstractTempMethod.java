@@ -1,9 +1,11 @@
 package com.luway.pikachu.core.engine;
 
+import com.luway.pikachu.core.worker.Worker;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Queue;
 
 /**
  * @author : iron
@@ -31,4 +33,10 @@ public abstract class AbstractTempMethod {
      * @throws IOException
      */
     protected abstract Document getConnect(String url, String method ,Map<String, String> cookies) throws IOException;
+
+    /**
+     * 获取队列
+     * @return
+     */
+    public abstract Queue<Worker> getQueue();
 }

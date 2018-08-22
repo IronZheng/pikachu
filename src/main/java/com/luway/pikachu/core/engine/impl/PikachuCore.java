@@ -150,6 +150,11 @@ public class PikachuCore extends AbstractTempMethod {
             }
         }
         worker.getPipeline().output(target);
+
+        // 将新任务调度到队尾
+        if (worker.getPipeline().checkWorker() != null) {
+            workerQueue.offer(worker.getPipeline().checkWorker());
+        }
     }
 
     public void stop() {
@@ -194,5 +199,10 @@ public class PikachuCore extends AbstractTempMethod {
                     .post();
         }
         return doc;
+    }
+
+    @Override
+    public Queue<Worker> getQueue() {
+        return workerQueue;
     }
 }
