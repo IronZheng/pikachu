@@ -22,7 +22,7 @@ github：https://github.com/Steelzheng/pikachuImpl
 ### 1.1.0 未发布
 增加cookies，可以对一些站点进行cookies参数验证，也就是模拟登陆。
 增加一些通用接口。
-
+增加定时任务
 
 ### 1.0.2 升级版来啦
 升级版中做了对xpath和css select的注解支持。同时优化了核心处理逻辑。使得任务的安排更加有序。
