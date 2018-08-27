@@ -24,7 +24,7 @@
     <groupId>cn.luway</groupId>
     <artifactId>pikachuImpl</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2-snapshot</version>
+    <version>1.1.0-snapshot</version>
 
     <properties>
         <powermock.version>1.6.5</powermock.version>
