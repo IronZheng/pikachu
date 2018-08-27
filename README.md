@@ -12,14 +12,14 @@ github：https://github.com/Steelzheng/pikachuImpl
 
 中央仓库Maven，此处版本号为最新
 ```$xml
-      <dependency>
-        <groupId>cn.luway</groupId>
-        <artifactId>pikachu</artifactId>
-        <version>1.0.2-snapshot</version>
-      </dependency>
+    <dependency>
+      <groupId>cn.luway</groupId>
+      <artifactId>pikachu</artifactId>
+      <version>1.1.1-snapshot</version>
+    </dependency>
 ```
 
-### 1.1.0 预览版
+### 1.1.1 预览版
 增加cookies，可以对一些站点进行cookies参数验证，也就是模拟登陆。
 增加一些通用接口。
 增加定时任务。
