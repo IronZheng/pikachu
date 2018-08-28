@@ -1,7 +1,9 @@
 package com.luway.pikachu.core.pipeline;
 
-import com.luway.pikachu.core.worker.Worker;
+import com.luway.pikachu.core.worker.GeneralWorker;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,7 +15,7 @@ public abstract class BasePipeline<T> {
 
     private T bean;
 
-    private Worker worker;
+    private List<GeneralWorker> worker = new ArrayList<>();
 
     public BasePipeline(T t) {
         this.bean = t;
@@ -29,12 +31,12 @@ public abstract class BasePipeline<T> {
      * check
      * @return
      */
-    public Worker checkWorker(){
+    public List<GeneralWorker> checkWorker(){
         return worker;
     }
 
-    public void regiestWorker(Worker worker){
-        this.worker = worker;
+    public void regiestWorker(GeneralWorker worker){
+        this.worker.add(worker);
     }
 
     public T getBean() {

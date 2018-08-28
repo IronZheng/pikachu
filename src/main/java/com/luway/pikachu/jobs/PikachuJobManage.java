@@ -2,7 +2,7 @@ package com.luway.pikachu.jobs;
 
 import com.luway.pikachu.common.SnowFlakeUtil;
 import com.luway.pikachu.core.engine.Pikachu;
-import com.luway.pikachu.core.worker.Worker;
+import com.luway.pikachu.core.worker.GeneralWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class PikachuJobManage {
      * @param unit
      * @return
      */
-    public boolean regiest(Worker worker, Long startTime, Long space, TimeUnit unit) throws Exception {
+    public boolean regiest(GeneralWorker worker, Long startTime, Long space, TimeUnit unit) throws Exception {
         try {
             String id = SnowFlakeUtil.getId();
             logger.info("注册定时任务，id为【{}}】", id);

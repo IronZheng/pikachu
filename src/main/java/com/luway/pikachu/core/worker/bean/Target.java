@@ -1,4 +1,4 @@
-package com.luway.pikachu.core.worker;
+package com.luway.pikachu.core.worker.bean;
 
 /**
  * @author zhenggm

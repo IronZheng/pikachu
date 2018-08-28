@@ -1,6 +1,7 @@
 package com.luway.pikachu.core.engine;
 
-import com.luway.pikachu.core.engine.impl.PikachuImpl;
+import com.luway.pikachu.core.worker.BathWorker;
+import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
 
 import java.util.Queue;
@@ -26,7 +27,15 @@ public interface Pikachu {
      * @param worker
      * @return
      */
-    PikachuImpl regist(Worker worker);
+    Pikachu regist(GeneralWorker worker);
+
+
+    /**
+     * 注册批量worker
+     * @param worker
+     * @return
+     */
+    Pikachu regist(BathWorker worker);
 
     /**
      * 启动爬虫服务
@@ -51,7 +60,7 @@ public interface Pikachu {
      * @param maxThreadNum
      * @return
      */
-    PikachuImpl setMaxThreadNum(Integer maxThreadNum);
+    Pikachu setMaxThreadNum(Integer maxThreadNum);
 
     /**
      * 设置核心线程数
@@ -59,7 +68,7 @@ public interface Pikachu {
      * @param coreNum
      * @return
      */
-    PikachuImpl setCoreNum(Integer coreNum);
+    Pikachu setCoreNum(Integer coreNum);
 
     /**
      * 获取队列

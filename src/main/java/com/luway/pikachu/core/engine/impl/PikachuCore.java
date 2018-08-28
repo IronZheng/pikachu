@@ -5,8 +5,10 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.engine.AbstractTempMethod;
-import com.luway.pikachu.core.worker.Target;
+import com.luway.pikachu.core.worker.BathWorker;
+import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
+import com.luway.pikachu.core.worker.bean.Target;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
@@ -33,7 +35,7 @@ import java.util.concurrent.ExecutorService;
  */
 
 public class PikachuCore extends AbstractTempMethod {
-    private final static Logger log = LoggerFactory.getLogger(PikachuImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(PikachuCore.class);
     private Document doc;
     private volatile Boolean flag = true;
     private volatile Long currentTime;
@@ -49,10 +51,9 @@ public class PikachuCore extends AbstractTempMethod {
         currentTime = System.currentTimeMillis();
     }
 
-    protected boolean putWorker(Worker worker) {
+    protected boolean putWorker(GeneralWorker worker) {
         return workerQueue.offer(worker);
     }
-
 
     public void start() {
         pikachuPool.execute(new Runnable() {
@@ -61,24 +62,40 @@ public class PikachuCore extends AbstractTempMethod {
                 while (flag) {
                     try {
                         Worker worker = workerQueue.poll();
-                        if (null != worker) {
+                        if (null == worker) {
+                            judgeTime();
+                        } else {
                             if (worker.validate()) {
-                                pikachuPool.execute(() -> {
-                                    try {
-                                        load(worker);
-                                    } catch (Exception e) {
-                                        log.error("core error", e);
-                                    }
-                                });
-                                currentTime = System.currentTimeMillis();
+
+                                if (worker instanceof GeneralWorker) {
+                                    GeneralWorker generalWorker = (GeneralWorker) worker;
+                                    pikachuPool.execute(() -> {
+                                        try {
+                                            load(generalWorker);
+                                        } catch (Exception e) {
+                                            log.error("core error", e);
+                                        }
+                                    });
+                                    currentTime = System.currentTimeMillis();
+                                }
+
+                                if (worker instanceof BathWorker) {
+                                    BathWorker bathWorker = (BathWorker) worker;
+                                    pikachuPool.execute(() -> {
+                                        try {
+                                            load(bathWorker);
+                                        } catch (Exception e) {
+                                            log.error("core error", e);
+                                        }
+                                    });
+                                    currentTime = System.currentTimeMillis();
+                                }
                             } else {
                                 log.error("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
                                 throw new Exception("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
                             }
-                        } else {
-                            judgeTime();
+                            Thread.sleep(500);
                         }
-                        Thread.sleep(500);
                     } catch (Exception e) {
                         log.error("core error", e);
                         stop();
@@ -88,8 +105,39 @@ public class PikachuCore extends AbstractTempMethod {
         });
     }
 
-    public synchronized void load(Worker worker) throws Exception {
+    /**
+     * 加载批量url方法
+     *
+     * @param worker
+     * @throws Exception
+     */
+    private void load(BathWorker worker) throws Exception {
+        for (String url : worker.getUrlList()) {
+            if (MathUrl.Method.GET.equals(worker.getMethod())) {
+                doc = Jsoup.connect(url)
+                        .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
+                        .cookies(worker.getCookies())
+                        .get();
+            } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+                doc = Jsoup.connect(url)
+                        .cookies(worker.getCookies())
+                        .post();
+            }
+            if (doc == null) {
+                worker.getPipeline().output(null);
+            }
+            Map<String, Object> target = select(doc, worker.getAttr());
+            out(target, worker);
+        }
+    }
 
+    /**
+     * 加载通用方法
+     *
+     * @param worker
+     * @throws Exception
+     */
+    public synchronized void load(GeneralWorker worker) throws Exception {
         if (worker.isLoadJs()) {
             loadJs(worker);
         } else {
@@ -97,7 +145,13 @@ public class PikachuCore extends AbstractTempMethod {
         }
     }
 
-    private void loadJs(Worker worker) throws Exception {
+    /**
+     * 加载需要js的页面
+     *
+     * @param worker
+     * @throws Exception
+     */
+    private void loadJs(GeneralWorker worker) throws Exception {
         // HtmlUnit 模拟浏览器
         WebClient wc = new WebClient(BrowserVersion.FIREFOX_52);
         wc.setJavaScriptTimeout(5000);
@@ -112,10 +166,17 @@ public class PikachuCore extends AbstractTempMethod {
         String pageAsXml = page.asXml();
         // Jsoup解析处理
         Document doc = Jsoup.parse(pageAsXml, worker.getUrl());
-        select(doc, worker);
+        Map<String, Object> target = select(doc, worker.getAttr());
+        out(target, worker);
     }
 
-    private void loadHtml(Worker worker) throws Exception {
+    /**
+     * 获取html
+     *
+     * @param worker
+     * @throws Exception
+     */
+    private void loadHtml(GeneralWorker worker) throws Exception {
         if (MathUrl.Method.GET.equals(worker.getMethod())) {
             doc = Jsoup.connect(worker.getUrl())
                     .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
@@ -129,16 +190,34 @@ public class PikachuCore extends AbstractTempMethod {
         if (doc == null) {
             worker.getPipeline().output(null);
         }
-        select(doc, worker);
+        Map<String, Object> target = select(doc, worker.getAttr());
+        out(target, worker);
     }
 
-    private void select(Document doc, Worker worker) throws Exception {
+    /**
+     * 输出到管道中
+     *
+     * @param target
+     * @param worker
+     */
+    private void out(Map<String, Object> target, Worker worker) {
+        worker.getPipeline().output(target);
+        // 将新任务调度到队尾
+        if (worker.getPipeline().checkWorker().size() > 0) {
+            List<GeneralWorker> workerList = worker.getPipeline().checkWorker();
+            for (GeneralWorker worker1 : workerList) {
+                workerQueue.offer(worker1);
+            }
+        }
+    }
+
+    private Map<String, Object> select(Document doc, Map<String, Target> params) throws Exception {
         Map<String, Object> target = new HashMap<>(16);
         HtmlCleaner hc = new HtmlCleaner();
         TagNode tn = hc.clean(doc.body().html());
         org.w3c.dom.Document dom = new DomSerializer(new CleanerProperties()).createDOM(tn);
         XPath xPath = XPathFactory.newInstance().newXPath();
-        for (Map.Entry<String, Target> attr : worker.getAttr().entrySet()) {
+        for (Map.Entry<String, Target> attr : params.entrySet()) {
             if (null != attr.getValue().getSelector()) {
                 Elements elements = doc.select(attr.getValue().getSelector());
                 target.put(attr.getValue().getName(), elements.toString());
@@ -149,12 +228,7 @@ public class PikachuCore extends AbstractTempMethod {
                 target.put(attr.getValue().getName(), result);
             }
         }
-        worker.getPipeline().output(target);
-
-        // 将新任务调度到队尾
-        if (worker.getPipeline().checkWorker() != null) {
-            workerQueue.offer(worker.getPipeline().checkWorker());
-        }
+        return target;
     }
 
     public void stop() {
