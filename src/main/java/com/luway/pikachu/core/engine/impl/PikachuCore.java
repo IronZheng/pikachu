@@ -40,7 +40,7 @@ public class PikachuCore extends AbstractTempMethod {
     private Document doc;
     private volatile Boolean flag = true;
     private volatile Long currentTime;
-    private Long stopTime;
+    private Long stopTime = 30L;
 
     private Queue<Worker> workerQueue;
     private ExecutorService pikachuPool;

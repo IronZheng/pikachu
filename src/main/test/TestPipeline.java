@@ -34,8 +34,16 @@ public class TestPipeline extends BasePipeline<TestBean> {
         String title = (String) result.get("title");
         System.out.println(title);
 
-        GeneralWorker worker = new GeneralWorker("1",TestBean.class).addPipeline(new TestPipeline(new TestBean()));
-        regiestWorker(worker);
+        String price = (String) result.get("price");
+        System.out.println(price);
+
+//        try {
+//            Thread.sleep(2000L);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        GeneralWorker worker = new GeneralWorker("1",TestBean.class).addPipeline(new TestPipeline(new TestBean()));
+//        regiestWorker(worker);
     }
 
 }

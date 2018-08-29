@@ -24,7 +24,6 @@ import java.util.Map;
 public class GeneralWorker  extends BaseWorker implements Worker{
     private final static Logger log = LoggerFactory.getLogger(GeneralWorker.class);
 
-
     public GeneralWorker(String id, Class<?> bean) {
         this.id = id;
         this.type = WorkerType.GENERAL;
@@ -36,7 +35,7 @@ public class GeneralWorker  extends BaseWorker implements Worker{
     }
 
     @Override
-    public Worker cookies(Map<String, String> cookies) {
+    public GeneralWorker cookies(Map<String, String> cookies) {
         this.cookies = cookies;
         return this;
     }
