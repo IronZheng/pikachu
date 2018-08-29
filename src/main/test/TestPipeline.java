@@ -1,4 +1,5 @@
 import com.luway.pikachu.core.pipeline.BasePipeline;
+import com.luway.pikachu.core.worker.GeneralWorker;
 
 import java.util.Map;
 
@@ -33,6 +34,8 @@ public class TestPipeline extends BasePipeline<TestBean> {
         String title = (String) result.get("title");
         System.out.println(title);
 
+        GeneralWorker worker = new GeneralWorker("1",TestBean.class).addPipeline(new TestPipeline(new TestBean()));
+        regiestWorker(worker);
     }
 
 }

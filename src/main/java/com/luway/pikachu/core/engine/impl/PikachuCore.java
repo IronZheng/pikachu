@@ -13,6 +13,7 @@ import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -42,7 +43,6 @@ public class PikachuCore extends AbstractTempMethod {
     private Long stopTime;
 
     private Queue<Worker> workerQueue;
-
     private ExecutorService pikachuPool;
 
     public PikachuCore(ExecutorService pikachuPool) {
@@ -114,12 +114,11 @@ public class PikachuCore extends AbstractTempMethod {
     private void load(BathWorker worker) throws Exception {
         for (String url : worker.getUrlList()) {
             if (MathUrl.Method.GET.equals(worker.getMethod())) {
-                doc = Jsoup.connect(url)
-                        .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
+                doc = getConnection(url)
                         .cookies(worker.getCookies())
                         .get();
             } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
-                doc = Jsoup.connect(url)
+                doc = getConnection(url)
                         .cookies(worker.getCookies())
                         .post();
             }
@@ -178,12 +177,11 @@ public class PikachuCore extends AbstractTempMethod {
      */
     private void loadHtml(GeneralWorker worker) throws Exception {
         if (MathUrl.Method.GET.equals(worker.getMethod())) {
-            doc = Jsoup.connect(worker.getUrl())
-                    .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
+            doc = getConnection(worker.getUrl())
                     .cookies(worker.getCookies())
                     .get();
         } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
-            doc = Jsoup.connect(worker.getUrl())
+            doc = getConnection(worker.getUrl())
                     .cookies(worker.getCookies())
                     .post();
         }
@@ -250,12 +248,9 @@ public class PikachuCore extends AbstractTempMethod {
     @Override
     protected Document getConnect(String url, String method) throws IOException {
         if (MathUrl.Method.GET.equals(method)) {
-            doc = Jsoup.connect(url)
-                    .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
-                    .get();
+            doc = getConnection(url).get();
         } else if (MathUrl.Method.POST.equals(method)) {
-            doc = Jsoup.connect(url)
-                    .post();
+            doc = getConnection(url).post();
         }
         return doc;
     }
@@ -263,16 +258,23 @@ public class PikachuCore extends AbstractTempMethod {
     @Override
     protected Document getConnect(String url, String method, Map<String, String> cookies) throws IOException {
         if (MathUrl.Method.GET.equals(method)) {
-            doc = Jsoup.connect(url)
-                    .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
+            doc = getConnection(url)
                     .cookies(cookies)
                     .get();
         } else if (MathUrl.Method.POST.equals(method)) {
-            doc = Jsoup.connect(url)
+            doc = getConnection(url)
                     .cookies(cookies)
                     .post();
         }
         return doc;
+    }
+
+    private Connection getConnection(String url) {
+        return Jsoup.connect(url).timeout(500)
+                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                .header("Accept-Encoding", "gzip, deflate, sdch")
+                .header("Accept-Language", "zh-CN,zh;q=0.8")
+                .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0");
     }
 
     @Override

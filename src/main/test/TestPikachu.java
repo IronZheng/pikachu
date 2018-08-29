@@ -24,6 +24,7 @@ public class TestPikachu {
                         .addPipeline(new TestPipeline(new TestBean())));
 
 
+
         pikachu.start();
         pikachu.stopAfterTime(30L);
         pikachu.regist(new GeneralWorker("1",TestBean.class).addPipeline(new BasePipeline(TestBean.class) {
