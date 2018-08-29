@@ -51,7 +51,7 @@ public class PikachuCore extends AbstractTempMethod {
         currentTime = System.currentTimeMillis();
     }
 
-    protected boolean putWorker(GeneralWorker worker) {
+    protected boolean putWorker(Worker worker) {
         return workerQueue.offer(worker);
     }
 
@@ -114,19 +114,27 @@ public class PikachuCore extends AbstractTempMethod {
     private void load(BathWorker worker) throws Exception {
         for (String url : worker.getUrlList()) {
             if (MathUrl.Method.GET.equals(worker.getMethod())) {
-                doc = getConnection(url)
-                        .cookies(worker.getCookies())
-                        .get();
+                if (worker.getCookies() != null) {
+                    doc = getConnection(url)
+                            .cookies(worker.getCookies())
+                            .get();
+                } else {
+                    doc = getConnection(url).get();
+                }
             } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
-                doc = getConnection(url)
-                        .cookies(worker.getCookies())
-                        .post();
+                if (worker.getCookies() != null) {
+                    doc = getConnection(url)
+                            .cookies(worker.getCookies())
+                            .post();
+                } else {
+                    doc = getConnection(url).post();
+                }
             }
             if (doc == null) {
-                worker.getPipeline().output(null);
+                worker.getPipeline().output(null, url);
             }
             Map<String, Object> target = select(doc, worker.getAttr());
-            out(target, worker);
+            out(target, url, worker);
         }
     }
 
@@ -166,7 +174,7 @@ public class PikachuCore extends AbstractTempMethod {
         // Jsoup解析处理
         Document doc = Jsoup.parse(pageAsXml, worker.getUrl());
         Map<String, Object> target = select(doc, worker.getAttr());
-        out(target, worker);
+        out(target, worker.getUrl(), worker);
     }
 
     /**
@@ -186,10 +194,10 @@ public class PikachuCore extends AbstractTempMethod {
                     .post();
         }
         if (doc == null) {
-            worker.getPipeline().output(null);
+            worker.getPipeline().output(null, worker.getUrl());
         }
         Map<String, Object> target = select(doc, worker.getAttr());
-        out(target, worker);
+        out(target, worker.getUrl(), worker);
     }
 
     /**
@@ -198,8 +206,8 @@ public class PikachuCore extends AbstractTempMethod {
      * @param target
      * @param worker
      */
-    private void out(Map<String, Object> target, Worker worker) {
-        worker.getPipeline().output(target);
+    private void out(Map<String, Object> target, String url, Worker worker) {
+        worker.getPipeline().output(target, url);
         // 将新任务调度到队尾
         if (worker.getPipeline().checkWorker().size() > 0) {
             List<GeneralWorker> workerList = worker.getPipeline().checkWorker();
@@ -270,7 +278,11 @@ public class PikachuCore extends AbstractTempMethod {
     }
 
     private Connection getConnection(String url) {
-        return Jsoup.connect(url).timeout(500)
+        try {
+            Thread.sleep(800);
+        } catch (InterruptedException e) {
+        }
+        return Jsoup.connect(url).timeout(300000)
                 .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
                 .header("Accept-Encoding", "gzip, deflate, sdch")
                 .header("Accept-Language", "zh-CN,zh;q=0.8")

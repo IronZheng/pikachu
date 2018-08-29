@@ -77,9 +77,7 @@ public class PikachuImpl implements Pikachu {
         if (null == worker) {
             throw new SimpleException("worker is null");
         }
-        // fixme
-
-//        core.putWorker(worker);
+        core.putWorker(worker);
         return this;
     }
 

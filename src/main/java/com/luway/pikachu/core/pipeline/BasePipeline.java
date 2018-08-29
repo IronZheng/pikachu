@@ -25,7 +25,7 @@ public abstract class BasePipeline<T> {
      * out
      * @param result
      */
-    public abstract void output(Map<String, Object> result);
+    public abstract void output(Map<String, Object> result,String url);
 
     /**
      * check

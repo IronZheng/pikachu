@@ -1,9 +1,12 @@
 package com.luway.pikachu.core.worker;
 
+import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.annotations.WorkerType;
 import com.luway.pikachu.core.pipeline.BasePipeline;
 import com.luway.pikachu.core.worker.bean.BaseWorker;
+import com.luway.pikachu.core.worker.bean.Target;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,7 +18,7 @@ import java.util.Map;
 public class BathWorker extends BaseWorker implements Worker {
 
     public BathWorker() {
-        this.type = WorkerType.BATCH;
+        super.setType(WorkerType.BATCH);
     }
 
     @Override
@@ -34,18 +37,35 @@ public class BathWorker extends BaseWorker implements Worker {
     }
 
     @Override
-    public Worker cookies(Map<String, String> cookies) {
-        return null;
+    public BathWorker cookies(Map<String, String> cookies) {
+        super.setCookies(cookies);
+        return this;
+    }
+
+
+    public BathWorker urlList(List<String> list) {
+        super.setUrlList(list);
+        return this;
+    }
+
+    public BathWorker attr(Map<String, Target> attr) {
+        super.setAttr(attr);
+        return this;
+    }
+
+    public BathWorker method(MathUrl.Method method) {
+        super.setMethod(method);
+        return this;
     }
 
     @Override
     public String toString() {
         return "BathWorker{" +
-                "method=" + method +
+                "method=" + super.getMethod() +
                 ", id='" + id + '\'' +
                 ", url='" + url + '\'' +
                 ", attr=" + attr +
-                ", cookies=" + cookies +
+                ", cookies=" + super.getType() +
                 ", pipeline=" + pipeline +
                 ", loadJs=" + loadJs +
                 '}';

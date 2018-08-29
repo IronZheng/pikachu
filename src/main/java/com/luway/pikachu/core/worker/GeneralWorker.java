@@ -21,22 +21,21 @@ import java.util.Map;
  **/
 
 
-public class GeneralWorker  extends BaseWorker implements Worker{
+public class GeneralWorker extends BaseWorker implements Worker {
     private final static Logger log = LoggerFactory.getLogger(GeneralWorker.class);
 
     public GeneralWorker(String id, Class<?> bean) {
         this.id = id;
-        this.type = WorkerType.GENERAL;
+        super.setType(WorkerType.GENERAL);
         if (bean == null) {
             throw new RuntimeException("[error] class is null");
         }
-        this.cookies = new HashMap<>();
         load(bean);
     }
 
     @Override
     public GeneralWorker cookies(Map<String, String> cookies) {
-        this.cookies = cookies;
+        super.setCookies(cookies);
         return this;
     }
 
@@ -47,7 +46,7 @@ public class GeneralWorker  extends BaseWorker implements Worker{
         if (this.url == null) {
             throw new RuntimeException("[error] url can not be null");
         }
-        this.method = u.method();
+        super.setMethod(u.method());
         this.loadJs = u.loadJs();
         return attr(bean);
     }
@@ -88,10 +87,10 @@ public class GeneralWorker  extends BaseWorker implements Worker{
     }
 
     @Override
-    public Boolean validate(){
-        if (pipeline==null){
+    public Boolean validate() {
+        if (pipeline == null) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }
@@ -99,11 +98,11 @@ public class GeneralWorker  extends BaseWorker implements Worker{
     @Override
     public String toString() {
         return "GeneralWorker{" +
-                "method=" + method +
+                "method=" + super.getMethod() +
                 ", id='" + id + '\'' +
                 ", url='" + url + '\'' +
                 ", attr=" + attr +
-                ", cookies=" + cookies +
+                ", cookies=" + super.getCookies() +
                 ", pipeline=" + pipeline +
                 ", loadJs=" + loadJs +
                 '}';

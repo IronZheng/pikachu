@@ -17,13 +17,15 @@ public class BaseWorker {
     public String id;
     public String url;
     public Map<String, Target> attr;
-    public Map<String, String> cookies;
+
     public BasePipeline pipeline;
     public List<String> urlList;
     public boolean loadJs;
-    public MathUrl.Method method;
 
-    public WorkerType type;
+    private MathUrl.Method method;
+    private Map<String, String> cookies;
+
+    private WorkerType type;
 
 
     public WorkerType getType() {
@@ -38,7 +40,7 @@ public class BaseWorker {
         return method;
     }
 
-    public void setMethod(MathUrl.Method method) {
+    protected void setMethod(MathUrl.Method method) {
         this.method = method;
     }
 
@@ -62,7 +64,7 @@ public class BaseWorker {
         return attr;
     }
 
-    public void setAttr(Map<String, Target> attr) {
+    protected void setAttr(Map<String, Target> attr) {
         this.attr = attr;
     }
 
@@ -70,7 +72,7 @@ public class BaseWorker {
         return cookies;
     }
 
-    public void setCookies(Map<String, String> cookies) {
+    protected void setCookies(Map<String, String> cookies) {
         this.cookies = cookies;
     }
 
@@ -94,7 +96,7 @@ public class BaseWorker {
         return urlList;
     }
 
-    public void setUrlList(List<String> urlList) {
+    protected void setUrlList(List<String> urlList) {
         this.urlList = urlList;
     }
 }
