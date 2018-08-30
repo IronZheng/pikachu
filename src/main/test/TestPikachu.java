@@ -59,7 +59,7 @@ public class TestPikachu {
         }
 
         Pikachu pikachu = new PikachuImpl("test")
-                .setCoreNum(5)
+                .setCoreNum(10)
                 .setMaxThreadNum(20)
                 .init()
                 .regist(new BathWorker()

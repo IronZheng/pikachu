@@ -5,6 +5,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.engine.AbstractTempMethod;
+import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.BathWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
@@ -113,29 +114,41 @@ public class PikachuCore extends AbstractTempMethod {
      */
     private void load(BathWorker worker) throws Exception {
         for (String url : worker.getUrlList()) {
-            if (MathUrl.Method.GET.equals(worker.getMethod())) {
-                if (worker.getCookies() != null) {
-                    doc = getConnection(url)
-                            .cookies(worker.getCookies())
-                            .get();
-                } else {
-                    doc = getConnection(url).get();
+            pikachuPool.execute(() -> {
+                try {
+                    exector(url, worker);
+                } catch (Exception e) {
+                    log.error("exception", e);
+                    throw new SimpleException(e);
                 }
-            } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
-                if (worker.getCookies() != null) {
-                    doc = getConnection(url)
-                            .cookies(worker.getCookies())
-                            .post();
-                } else {
-                    doc = getConnection(url).post();
-                }
-            }
-            if (doc == null) {
-                worker.getPipeline().output(null, url);
-            }
-            Map<String, Object> target = select(doc, worker.getAttr());
-            out(target, url, worker);
+            });
         }
+    }
+
+    private void exector(String url, BathWorker worker) throws Exception {
+        Document doc = null;
+        if (MathUrl.Method.GET.equals(worker.getMethod())) {
+            if (worker.getCookies() != null) {
+                doc = getConnection(url)
+                        .cookies(worker.getCookies())
+                        .get();
+            } else {
+                doc = getConnection(url).get();
+            }
+        } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+            if (worker.getCookies() != null) {
+                doc = getConnection(url)
+                        .cookies(worker.getCookies())
+                        .post();
+            } else {
+                doc = getConnection(url).post();
+            }
+        }
+        if (doc == null) {
+            worker.getPipeline().output(null, url);
+        }
+        Map<String, Object> target = select(doc, worker.getAttr());
+        out(target, url, worker);
     }
 
     /**
@@ -206,7 +219,7 @@ public class PikachuCore extends AbstractTempMethod {
      * @param target
      * @param worker
      */
-    private void out(Map<String, Object> target, String url, Worker worker) {
+    private synchronized void out(Map<String, Object> target, String url, Worker worker) {
         worker.getPipeline().output(target, url);
         // 将新任务调度到队尾
         if (worker.getPipeline().checkWorker().size() > 0) {
