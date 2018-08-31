@@ -1,9 +1,7 @@
 import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.engine.impl.PikachuImpl;
-import com.luway.pikachu.core.pipeline.BasePipeline;
 import com.luway.pikachu.core.worker.BathWorker;
-import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.bean.Target;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.Map;
 
 public class TestPikachu {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         Map<String, String> map = new HashMap<>();
         map.put("ll", "118172");

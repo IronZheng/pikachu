@@ -147,7 +147,7 @@ public class PikachuCore extends AbstractTempMethod {
         if (doc == null) {
             worker.getPipeline().output(null, url);
         }
-        Map<String, Object> target = select(doc, worker.getAttr());
+        Map<String, Elements> target = select(doc, worker.getAttr());
         out(target, url, worker);
     }
 
@@ -186,7 +186,7 @@ public class PikachuCore extends AbstractTempMethod {
         String pageAsXml = page.asXml();
         // Jsoup解析处理
         Document doc = Jsoup.parse(pageAsXml, worker.getUrl());
-        Map<String, Object> target = select(doc, worker.getAttr());
+        Map<String, Elements> target = select(doc, worker.getAttr());
         out(target, worker.getUrl(), worker);
     }
 
@@ -209,7 +209,7 @@ public class PikachuCore extends AbstractTempMethod {
         if (doc == null) {
             worker.getPipeline().output(null, worker.getUrl());
         }
-        Map<String, Object> target = select(doc, worker.getAttr());
+        Map<String, Elements> target = select(doc, worker.getAttr());
         out(target, worker.getUrl(), worker);
     }
 
@@ -219,7 +219,7 @@ public class PikachuCore extends AbstractTempMethod {
      * @param target
      * @param worker
      */
-    private synchronized void out(Map<String, Object> target, String url, Worker worker) {
+    private synchronized void out(Map<String, Elements> target, String url, Worker worker) {
         worker.getPipeline().output(target, url);
         // 将新任务调度到队尾
         if (worker.getPipeline().checkWorker().size() > 0) {
@@ -230,8 +230,8 @@ public class PikachuCore extends AbstractTempMethod {
         }
     }
 
-    private Map<String, Object> select(Document doc, Map<String, Target> params) throws Exception {
-        Map<String, Object> target = new HashMap<>(16);
+    private Map<String, Elements> select(Document doc, Map<String, Target> params) throws Exception {
+        Map<String, Elements> target = new HashMap<>(16);
         HtmlCleaner hc = new HtmlCleaner();
         TagNode tn = hc.clean(doc.body().html());
         org.w3c.dom.Document dom = new DomSerializer(new CleanerProperties()).createDOM(tn);
@@ -239,11 +239,13 @@ public class PikachuCore extends AbstractTempMethod {
         for (Map.Entry<String, Target> attr : params.entrySet()) {
             if (null != attr.getValue().getSelector()) {
                 Elements elements = doc.select(attr.getValue().getSelector());
-                target.put(attr.getValue().getName(), elements.toString());
+                target.put(attr.getValue().getName(), elements);
             }
+
             if (null != attr.getValue().getXpath()) {
-                NodeList result = (NodeList) xPath.evaluate(attr.getValue().getXpath(),
+                Elements result = (Elements) xPath.evaluate(attr.getValue().getXpath(),
                         dom, XPathConstants.NODESET);
+
                 target.put(attr.getValue().getName(), result);
             }
         }

@@ -1,6 +1,7 @@
 package com.luway.pikachu.core.pipeline;
 
 import com.luway.pikachu.core.worker.GeneralWorker;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public abstract class BasePipeline<T> {
      * out
      * @param result
      */
-    public abstract void output(Map<String, Object> result,String url);
+    public abstract void output(Map<String, Elements> result, String url);
 
     /**
      * check
