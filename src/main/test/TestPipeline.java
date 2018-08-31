@@ -1,4 +1,6 @@
 import com.luway.pikachu.core.pipeline.BasePipeline;
+import com.luway.pikachu.core.worker.GeneralWorker;
+import org.jsoup.select.Elements;
 
 import java.util.Map;
 
@@ -16,7 +18,7 @@ public class TestPipeline extends BasePipeline<TestBean> {
     }
 
     @Override
-    public void output(Map<String, Object> result) {
+    public void output(Map<String, Elements> result, String url) {
 //        NodeList nodeList = (NodeList) result.get("img");
 //        for (int i = 0; i < nodeList.getLength(); i++) {
 //            Node node = nodeList.item(i);
@@ -30,8 +32,19 @@ public class TestPipeline extends BasePipeline<TestBean> {
 //                    node.getNodeValue() == null ? node.getTextContent() : node.getNodeValue());
 //
 //        }
-        String title = (String) result.get("title");
+        Elements title =  result.get("title");
         System.out.println(title);
 
+        Elements price =  result.get("price");
+        System.out.println(url);
+
+//        try {
+//            Thread.sleep(2000L);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        GeneralWorker worker = new GeneralWorker("1",TestBean.class).addPipeline(new TestPipeline(new TestBean()));
+//        regiestWorker(worker);
     }
+
 }

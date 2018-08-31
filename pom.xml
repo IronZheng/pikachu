@@ -2,6 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -10,9 +22,9 @@
     </parent>
 
     <groupId>cn.luway</groupId>
-    <artifactId>pikachuImpl</artifactId>
+    <artifactId>pikachu</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2-snapshot</version>
+    <version>1.1.1</version>
 
     <properties>
         <powermock.version>1.6.5</powermock.version>
@@ -123,6 +135,12 @@
             <groupId>com.perforce.p4maven</groupId>
             <artifactId>p4maven-provider</artifactId>
             <version>1.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>apache-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -252,16 +270,16 @@
     </licenses>
 
     <scm>
-        <url>https://gitee.com/ironzheng/pikachuImpl.git</url>
-        <connection>https://gitee.com/ironzheng/pikachuImpl.git</connection>
-        <developerConnection>http://pikachuImpl.luway.cn</developerConnection>
+        <url>https://gitee.com/ironzheng/pikachu.git</url>
+        <connection>https://gitee.com/ironzheng/pikachu.git</connection>
+        <developerConnection>http://pikachu.luway.cn</developerConnection>
     </scm>
 
     <developers>
         <developer>
             <name>zhenggangmin</name>
             <email>389093062@qq.com</email>
-            <url>http://pikachuImpl.luway.cn</url>
+            <url>http://pikachu.luway.cn</url>
         </developer>
     </developers>
 </project>

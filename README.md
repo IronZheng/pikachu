@@ -5,22 +5,39 @@
 
 使用注解的方式，定义数据源。希望pikachu可以作为很好的底层，去支撑开发者的业务系统。
 
-持续开发中。。
+目前版本迭代中。文档也准备着手编写了，原谅我一直比较懒。示例的例子，后续会提交上来。
 
-github：https://github.com/Steelzheng/pikachuImpl
-开源中国：https://gitee.com/ironzheng/pikachuImpl
+JDK 版本 1.8
+
+github：https://github.com/Steelzheng/pikachu
+
+开源中国：https://gitee.com/ironzheng/pikachu
 
 中央仓库Maven，此处版本号为最新
 ```$xml
-      <dependency>
-        <groupId>cn.luway</groupId>
-        <artifactId>pikachu</artifactId>
-        <version>1.0.2-snapshot</version>
-      </dependency>
+    <dependency>
+      <groupId>cn.luway</groupId>
+      <artifactId>pikachu</artifactId>
+      <version>1.1.1-snapshot</version>
+    </dependency>
 ```
+### 1.1.1 
 
-### 1.0.3
+### 1.1.1 预览版
+重构了爬虫的核心处理逻辑，使得任务分配比之前版本更加合理，效率上也更高。由于重构了核心部分，所以对之前的版本是不兼容的。
 
+主要优化的功能为：
+
+1.增加cookies，可以对一些站点进行cookies参数验证，也就是模拟登陆。
+
+2.增加一些通用接口。
+
+3.增加定时任务。
+
+4.增加批量处理，可以对分页地址池批量处理。
+
+5.随机时间间隔，防止高并发对网站造成过大的压力。也防止被网站封杀。
+（这个还不能彻底解决被封杀的问题，只能说一定程度缓解了高并发可能触发网站的封杀。后续版本继续考虑新的方式。）
 
 ### 1.0.2 升级版来啦
 升级版中做了对xpath和css select的注解支持。同时优化了核心处理逻辑。使得任务的安排更加有序。
@@ -36,7 +53,9 @@ github：https://github.com/Steelzheng/pikachuImpl
 
 欢迎提交issues或者给我发邮件。
 
-## 使用方式
+
+====================================================================================================
+## 调试方式
 安装Java环境，clone 代码 
 ```$xslt
 git clone https://gitee.com/ironzheng/pikachuImpl.git

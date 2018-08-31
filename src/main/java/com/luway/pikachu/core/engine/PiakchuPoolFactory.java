@@ -8,7 +8,6 @@ import java.util.concurrent.ThreadFactory;
  * @create 2018-04-25 13:38
  **/
 public class PiakchuPoolFactory implements ThreadFactory {
-    private Map<String, Pikachu> pcmMap = new HashMap<>();
 
     private int counter;
     private String name;

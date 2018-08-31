@@ -1,15 +1,15 @@
 package com.luway.pikachu.core.engine.impl;
 
-import com.luway.pikachu.core.engine.AbstractTempMethod;
 import com.luway.pikachu.core.engine.PiakchuPoolFactory;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.exception.SimpleException;
+import com.luway.pikachu.core.worker.BathWorker;
+import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
-import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -64,7 +64,7 @@ public class PikachuImpl implements Pikachu {
     }
 
     @Override
-    public PikachuImpl regist(Worker worker) {
+    public PikachuImpl regist(GeneralWorker worker) {
         if (null == worker) {
             throw new SimpleException("worker is null");
         }
@@ -72,6 +72,14 @@ public class PikachuImpl implements Pikachu {
         return this;
     }
 
+    @Override
+    public PikachuImpl regist(BathWorker worker) {
+        if (null == worker) {
+            throw new SimpleException("worker is null");
+        }
+        core.putWorker(worker);
+        return this;
+    }
 
     /**
      * start pikachu
@@ -114,6 +122,11 @@ public class PikachuImpl implements Pikachu {
     public PikachuImpl setCoreNum(Integer coreNum) {
         this.coreNum = coreNum;
         return this;
+    }
+
+    @Override
+    public Queue<Worker> getQueue() {
+        return core.getQueue();
     }
 
 }
