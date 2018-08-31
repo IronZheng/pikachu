@@ -30,6 +30,8 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 
+import static com.luway.pikachu.common.TimeUtil.sleep;
+
 /**
  * @author : iron
  * @version : 1.0.0
@@ -126,6 +128,7 @@ public class PikachuCore extends AbstractTempMethod {
     }
 
     private void exector(String url, BathWorker worker) throws Exception {
+        sleep();
         Document doc = null;
         if (MathUrl.Method.GET.equals(worker.getMethod())) {
             if (worker.getCookies() != null) {
