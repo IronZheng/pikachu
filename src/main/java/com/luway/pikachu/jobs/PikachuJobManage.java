@@ -2,6 +2,7 @@ package com.luway.pikachu.jobs;
 
 import com.luway.pikachu.common.SnowFlakeUtil;
 import com.luway.pikachu.core.engine.Pikachu;
+import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,5 +57,16 @@ public class PikachuJobManage {
         }
     }
 
-
+    /**
+     * 关闭定时任务线程池
+     * @return
+     */
+    public boolean shutdown() {
+        try {
+            taskPool.shutdown();
+        } catch (Exception e) {
+            throw new SimpleException(e);
+        }
+        return true;
+    }
 }

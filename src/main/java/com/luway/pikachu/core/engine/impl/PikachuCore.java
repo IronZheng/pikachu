@@ -200,14 +200,24 @@ public class PikachuCore extends AbstractTempMethod {
      * @throws Exception
      */
     private void loadHtml(GeneralWorker worker) throws Exception {
-        if (MathUrl.Method.GET.equals(worker.getMethod())) {
-            doc = getConnection(worker.getUrl())
-                    .cookies(worker.getCookies())
-                    .get();
-        } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
-            doc = getConnection(worker.getUrl())
-                    .cookies(worker.getCookies())
-                    .post();
+        if (worker.getCookies() == null) {
+            if (MathUrl.Method.GET.equals(worker.getMethod())) {
+                doc = getConnection(worker.getUrl())
+                        .get();
+            } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+                doc = getConnection(worker.getUrl())
+                        .post();
+            }
+        } else {
+            if (MathUrl.Method.GET.equals(worker.getMethod())) {
+                doc = getConnection(worker.getUrl())
+                        .cookies(worker.getCookies())
+                        .get();
+            } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+                doc = getConnection(worker.getUrl())
+                        .cookies(worker.getCookies())
+                        .post();
+            }
         }
         if (doc == null) {
             worker.getPipeline().output(null, worker.getUrl());

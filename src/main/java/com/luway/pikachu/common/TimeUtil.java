@@ -1,7 +1,5 @@
 package com.luway.pikachu.common;
 
-import java.util.Random;
-
 /**
  * @author : iron
  * @version : 1.0.0
