@@ -86,6 +86,21 @@ public class TestPikachu {
                 .regist(new Worker("test", TestBean.class)
                         .addPipeline(new TestPipeline(new TestBean())))
                 .start();
+        
+        
+    // 批量URL工人    
+    GeneralWorker generalWorker =  new GeneralWorker("1", TestBean.class)
+                    .addPipeline(new BasePipeline(TestBean.class) {
+                        @Override
+                        public void output(Map result, String url) {
+                            System.out.println(result);
+                        }
+                    });
+    
+    // 创建一个定时任务中心
+    PikachuJobManage pikachuJobManage = new PikachuJobManage(pikachu);
+    pikachuJobManage.regiest(generalWorker,1L,5L,TimeUnit.SECONDS);
+ 
     }
 }
 ```
