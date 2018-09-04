@@ -13,7 +13,7 @@ github：https://github.com/Steelzheng/pikachu
 
 开源中国：https://gitee.com/ironzheng/pikachu
 
-中央仓库Maven，此处版本号为最新
+中央仓库Maven，此处版本号为最新（随时更新）
 ```$xml
     <dependency>
       <groupId>cn.luway</groupId>
@@ -22,7 +22,9 @@ github：https://github.com/Steelzheng/pikachu
     </dependency>
 ```
 ### 1.1.1 
- 1.1.1 版本是相对正式的版本。
+1.1.1 版本功能介绍，相对预览版，修正了一些BUG，提升稳定性。
+
+优化：修改批量任务处理方式，改为多线程任务调度模式。 
 
 ### 1.1.1 预览版
 重构了爬虫的核心处理逻辑，使得任务分配比之前版本更加合理，效率上也更高。由于重构了核心部分，所以对之前的版本是不兼容的。
