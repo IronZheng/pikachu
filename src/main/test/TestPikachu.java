@@ -1,13 +1,17 @@
 import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.engine.impl.PikachuImpl;
+import com.luway.pikachu.core.pipeline.BasePipeline;
 import com.luway.pikachu.core.worker.BathWorker;
+import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.bean.Target;
+import com.luway.pikachu.jobs.PikachuJobManage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -18,7 +22,7 @@ import java.util.Map;
 
 public class TestPikachu {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Map<String, String> map = new HashMap<>();
         map.put("ll", "118172");
@@ -66,16 +70,20 @@ public class TestPikachu {
                         .attr(attr)
                         .addPipeline(new TestPipeline(new TestBean())));
 
+        PikachuJobManage pikachuJobManage = new PikachuJobManage(pikachu);
 
+       GeneralWorker generalWorker =  new GeneralWorker("1", TestBean.class)
+                .addPipeline(new BasePipeline(TestBean.class) {
+                    @Override
+                    public void output(Map result, String url) {
+                        System.out.println(result);
+                    }
+                });
+
+        pikachuJobManage.regiest(generalWorker,1L,5L,TimeUnit.SECONDS);
         pikachu.start();
 
-//        pikachu.stopAfterTime(30L);
-//        pikachu.regist(new GeneralWorker("1", TestBean.class).addPipeline(new BasePipeline(TestBean.class) {
-//            @Override
-//            public void output(Map result) {
-//                System.out.println(result);
-//            }
-//        }));
+        pikachu.stopAfterTime(30L);
     }
 
 }
