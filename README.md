@@ -18,9 +18,14 @@ github：https://github.com/Steelzheng/pikachu
     <dependency>
       <groupId>cn.luway</groupId>
       <artifactId>pikachu</artifactId>
-      <version>1.1.1</version>
+      <version>1.1.2</version>
     </dependency>
 ```
+## 1.1.2
+
+补丁升级
+
+
 ### 1.1.1 
 1.1.1 版本功能介绍，相对预览版，修正了一些BUG，提升稳定性。
 

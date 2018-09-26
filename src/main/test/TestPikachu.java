@@ -72,7 +72,7 @@ public class TestPikachu {
 
         PikachuJobManage pikachuJobManage = new PikachuJobManage(pikachu);
 
-       GeneralWorker generalWorker =  new GeneralWorker("1", TestBean.class)
+        GeneralWorker generalWorker = new GeneralWorker("1", TestBean.class)
                 .addPipeline(new BasePipeline(TestBean.class) {
                     @Override
                     public void output(Map result, String url) {
@@ -80,10 +80,12 @@ public class TestPikachu {
                     }
                 });
 
-        pikachuJobManage.regiest(generalWorker,1L,5L,TimeUnit.SECONDS);
+        pikachuJobManage.regiest(generalWorker, 1L, 5L, TimeUnit.SECONDS);
         pikachu.start();
 
         pikachu.stopAfterTime(30L);
+
+
     }
 
 }

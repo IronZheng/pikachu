@@ -314,7 +314,8 @@ public class PikachuCore extends AbstractTempMethod {
                 .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
                 .header("Accept-Encoding", "gzip, deflate, sdch")
                 .header("Accept-Language", "zh-CN,zh;q=0.8")
-                .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0");
+                .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0")
+                .validateTLSCertificates(false);
     }
 
     @Override
