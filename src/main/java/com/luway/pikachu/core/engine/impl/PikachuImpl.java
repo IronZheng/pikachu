@@ -15,6 +15,8 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static com.luway.pikachu.core.exception.Constant.NO_WORKER;
+
 /**
  * @author zhenggm
  * @create 2018-04-25 13:39
@@ -52,7 +54,7 @@ public class PikachuImpl implements Pikachu {
         if (pikachuPool == null) {
             pikachuPool = new ThreadPoolExecutor(
                     coreNum, maxThreadNum, 0L, TimeUnit.SECONDS,
-                    new LinkedBlockingDeque<>(1024), new PiakchuPoolFactory("pikachu")
+                    new LinkedBlockingDeque<>(1024), new PiakchuPoolFactory(name)
                     , new ThreadPoolExecutor.AbortPolicy());
         }
         if (core == null) {
@@ -66,7 +68,7 @@ public class PikachuImpl implements Pikachu {
     @Override
     public PikachuImpl regist(GeneralWorker worker) {
         if (null == worker) {
-            throw new SimpleException("worker is null");
+            throw new SimpleException(NO_WORKER);
         }
         core.putWorker(worker);
         return this;
@@ -75,7 +77,7 @@ public class PikachuImpl implements Pikachu {
     @Override
     public PikachuImpl regist(BathWorker worker) {
         if (null == worker) {
-            throw new SimpleException("worker is null");
+            throw new SimpleException(NO_WORKER);
         }
         core.putWorker(worker);
         return this;
