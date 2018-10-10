@@ -21,9 +21,11 @@ github：https://github.com/Steelzheng/pikachu
       <version>1.1.2</version>
     </dependency>
 ```
-## 1.1.2
+## 1.1.2~1.1.3
 
 补丁升级
+
+修复定时管理只能注册常用worker，现支持两种模式。
 
 
 ### 1.1.1 
