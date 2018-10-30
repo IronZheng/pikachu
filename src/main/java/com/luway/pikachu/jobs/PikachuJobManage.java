@@ -3,7 +3,9 @@ package com.luway.pikachu.jobs;
 import com.luway.pikachu.common.SnowFlakeUtil;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.exception.SimpleException;
+import com.luway.pikachu.core.worker.BathWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
+import com.luway.pikachu.core.worker.Worker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,14 +41,19 @@ public class PikachuJobManage {
      * @param unit
      * @return
      */
-    public boolean regiest(GeneralWorker worker, Long startTime, Long space, TimeUnit unit) throws Exception {
+    public boolean regiest(Worker worker, Long startTime, Long space, TimeUnit unit) throws Exception {
         try {
             String id = SnowFlakeUtil.getId();
             logger.info("注册定时任务，id为【{}}】", id);
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
-                    pikachu.regist(worker);
+                    if (worker instanceof GeneralWorker) {
+                        pikachu.regist((GeneralWorker) worker);
+                    }
+                    if (worker instanceof BathWorker) {
+                        pikachu.regist((BathWorker) worker);
+                    }
                 }
             };
 
@@ -59,6 +66,7 @@ public class PikachuJobManage {
 
     /**
      * 关闭定时任务线程池
+     *
      * @return
      */
     public boolean shutdown() {

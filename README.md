@@ -18,9 +18,16 @@ github：https://github.com/Steelzheng/pikachu
     <dependency>
       <groupId>cn.luway</groupId>
       <artifactId>pikachu</artifactId>
-      <version>1.1.1</version>
+      <version>1.1.4</version>
     </dependency>
 ```
+## 1.1.2~1.1.3
+
+补丁升级
+
+修复定时管理只能注册常用worker，现支持两种模式。
+
+
 ### 1.1.1 
 1.1.1 版本功能介绍，相对预览版，修正了一些BUG，提升稳定性。
 

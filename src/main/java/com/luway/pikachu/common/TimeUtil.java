@@ -11,7 +11,6 @@ public class TimeUtil {
     public static void sleep() {
         try {
             int sleep = (int) (Math.random() * 500 + 1);
-            System.out.println(sleep);
             Thread.sleep(new Long(sleep));
         } catch (InterruptedException e) {
             e.printStackTrace();
