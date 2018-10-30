@@ -20,7 +20,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -28,6 +27,7 @@ import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 
 import static com.luway.pikachu.common.TimeUtil.sleep;
@@ -45,7 +45,7 @@ public class PikachuCore extends AbstractTempMethod {
     private volatile Long currentTime;
     private Long stopTime = 30L;
 
-    private Queue<Worker> workerQueue;
+    private BlockingQueue<Worker> workerQueue;
     private ExecutorService pikachuPool;
 
     public PikachuCore(ExecutorService pikachuPool) {
@@ -64,7 +64,7 @@ public class PikachuCore extends AbstractTempMethod {
             public void run() {
                 while (flag) {
                     try {
-                        Worker worker = workerQueue.poll();
+                        Worker worker = workerQueue.take();
                         if (null == worker) {
                             judgeTime();
                         } else {
@@ -97,7 +97,6 @@ public class PikachuCore extends AbstractTempMethod {
                                 log.error("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
                                 throw new Exception("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
                             }
-                            Thread.sleep(500);
                         }
                     } catch (Exception e) {
                         log.error("core error", e);
