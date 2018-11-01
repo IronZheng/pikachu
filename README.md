@@ -13,6 +13,9 @@ github：https://github.com/Steelzheng/pikachu
 
 开源中国：https://gitee.com/ironzheng/pikachu
 
+# 文档地址
+https://www.yuque.com/zhenggangmin/pikachu
+
 中央仓库Maven，此处版本号为最新（随时更新）
 ```$xml
     <dependency>
