@@ -1,5 +1,6 @@
 package com.luway.pikachu.core.engine;
 
+import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
 import org.jsoup.nodes.Document;
@@ -24,7 +25,7 @@ public abstract class AbstractTempMethod {
      * @return
      * @throws IOException
      */
-    protected abstract Document getConnect(String url, String method) throws IOException;
+    protected abstract Document getConnect(String url, MathUrl.Method method) throws IOException;
 
     /**
      * 添加cookies，抓取页面内容
@@ -35,7 +36,7 @@ public abstract class AbstractTempMethod {
      * @return
      * @throws IOException
      */
-    protected abstract Document getConnect(String url, String method, Map<String, String> cookies) throws IOException;
+    protected abstract Document getConnect(String url, MathUrl.Method method, Map<String, String> cookies) throws IOException;
 
     /**
      * 获取队列

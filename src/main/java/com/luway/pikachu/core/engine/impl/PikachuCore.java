@@ -281,7 +281,7 @@ public class PikachuCore extends AbstractTempMethod {
     }
 
     @Override
-    protected Document getConnect(String url, String method) throws IOException {
+    protected Document getConnect(String url, MathUrl.Method method) throws IOException {
         if (MathUrl.Method.GET.equals(method)) {
             doc = getConnection(url).get();
         } else if (MathUrl.Method.POST.equals(method)) {
@@ -291,7 +291,7 @@ public class PikachuCore extends AbstractTempMethod {
     }
 
     @Override
-    protected Document getConnect(String url, String method, Map<String, String> cookies) throws IOException {
+        protected Document getConnect(String url, MathUrl.Method method, Map<String, String> cookies) throws IOException {
         if (MathUrl.Method.GET.equals(method)) {
             doc = getConnection(url)
                     .cookies(cookies)

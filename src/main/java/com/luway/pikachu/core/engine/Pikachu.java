@@ -1,9 +1,13 @@
 package com.luway.pikachu.core.engine;
 
+import com.luway.pikachu.core.annotations.MathUrl;
 import com.luway.pikachu.core.worker.BathWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
+import org.jsoup.nodes.Document;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -32,6 +36,7 @@ public interface Pikachu {
 
     /**
      * 注册批量worker
+     *
      * @param worker
      * @return
      */
@@ -72,7 +77,27 @@ public interface Pikachu {
 
     /**
      * 获取队列
+     *
      * @return
      */
     Queue<Worker> getQueue();
+
+
+    /**
+     * 获取html
+     *
+     * @param url
+     * @param method
+     * @return
+     */
+    Document getConnect(String url, MathUrl.Method method) throws IOException;
+
+    /**
+     * 获取html,携带cookies
+     *
+     * @param url
+     * @param method
+     * @return
+     */
+    Document getConnect(String url, MathUrl.Method method, Map<String, String> cookies) throws IOException;
 }
