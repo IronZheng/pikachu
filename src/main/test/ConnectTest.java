@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static jdk.nashorn.internal.runtime.PropertyDescriptor.GET;
 
 /**
  * @author : iron
