@@ -107,17 +107,6 @@ public class PikachuImpl implements Pikachu {
         core.stop();
     }
 
-    /**
-     * 在所有任务都结束且设置的时间内没有新任务则结束爬虫线程。
-     * 推荐使用
-     *
-     * @param time
-     */
-    @Override
-    public void stopAfterTime(Long time) {
-        core.stopAfterTime(time);
-    }
-
     @Override
     public PikachuImpl setMaxThreadNum(Integer maxThreadNum) {
         this.maxThreadNum = maxThreadNum;

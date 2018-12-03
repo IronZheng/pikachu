@@ -53,13 +53,6 @@ public interface Pikachu {
     void stop();
 
     /**
-     * 指定空闲多少时间之后，停止爬虫服务
-     *
-     * @param time
-     */
-    void stopAfterTime(Long time);
-
-    /**
      * 设置最大线程数
      *
      * @param maxThreadNum

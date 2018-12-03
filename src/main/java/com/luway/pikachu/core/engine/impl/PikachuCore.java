@@ -42,7 +42,6 @@ public class PikachuCore extends AbstractTempMethod {
     private final static Logger log = LoggerFactory.getLogger(PikachuCore.class);
     private Document doc;
     private volatile Boolean flag = true;
-    private volatile Long currentTime;
     private Long stopTime = 30L;
 
     private BlockingQueue<Worker> workerQueue;
@@ -65,38 +64,33 @@ public class PikachuCore extends AbstractTempMethod {
                 while (flag) {
                     try {
                         Worker worker = workerQueue.take();
-                        if (null == worker) {
-                            judgeTime();
-                        } else {
-                            if (worker.validate()) {
-
-                                if (worker instanceof GeneralWorker) {
-                                    GeneralWorker generalWorker = (GeneralWorker) worker;
-                                    pikachuPool.execute(() -> {
-                                        try {
-                                            load(generalWorker);
-                                        } catch (Exception e) {
-                                            log.error("core error", e);
-                                        }
-                                    });
-                                    currentTime = System.currentTimeMillis();
-                                }
-
-                                if (worker instanceof BathWorker) {
-                                    BathWorker bathWorker = (BathWorker) worker;
-                                    pikachuPool.execute(() -> {
-                                        try {
-                                            load(bathWorker);
-                                        } catch (Exception e) {
-                                            log.error("core error", e);
-                                        }
-                                    });
-                                    currentTime = System.currentTimeMillis();
-                                }
-                            } else {
-                                log.error("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
-                                throw new Exception("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
+                        if (worker.validate()) {
+                            if (worker instanceof GeneralWorker) {
+                                GeneralWorker generalWorker = (GeneralWorker) worker;
+                                pikachuPool.execute(() -> {
+                                    try {
+                                        load(generalWorker);
+                                    } catch (Exception e) {
+                                        log.error("core error", e);
+                                    }
+                                });
+                                currentTime = System.currentTimeMillis();
                             }
+
+                            if (worker instanceof BathWorker) {
+                                BathWorker bathWorker = (BathWorker) worker;
+                                pikachuPool.execute(() -> {
+                                    try {
+                                        load(bathWorker);
+                                    } catch (Exception e) {
+                                        log.error("core error", e);
+                                    }
+                                });
+                                currentTime = System.currentTimeMillis();
+                            }
+                        } else {
+                            log.error("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
+                            throw new Exception("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
                         }
                     } catch (Exception e) {
                         log.error("core error", e);
@@ -269,17 +263,6 @@ public class PikachuCore extends AbstractTempMethod {
         pikachuPool.shutdown();
     }
 
-    public void stopAfterTime(Long time) {
-        this.stopTime = time;
-    }
-
-    private void judgeTime() {
-        Long nowDate = System.currentTimeMillis();
-        if ((nowDate - currentTime) > (stopTime * 1000)) {
-            this.stop();
-        }
-    }
-
     @Override
     protected Document getConnect(String url, MathUrl.Method method) throws IOException {
         if (MathUrl.Method.GET.equals(method)) {
@@ -291,7 +274,7 @@ public class PikachuCore extends AbstractTempMethod {
     }
 
     @Override
-        protected Document getConnect(String url, MathUrl.Method method, Map<String, String> cookies) throws IOException {
+    protected Document getConnect(String url, MathUrl.Method method, Map<String, String> cookies) throws IOException {
         if (MathUrl.Method.GET.equals(method)) {
             doc = getConnection(url)
                     .cookies(cookies)
