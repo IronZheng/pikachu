@@ -50,7 +50,6 @@ public class PikachuCore extends AbstractTempMethod {
     public PikachuCore(ExecutorService pikachuPool) {
         this.workerQueue = new ArrayBlockingQueue<>(1024);
         this.pikachuPool = pikachuPool;
-        currentTime = System.currentTimeMillis();
     }
 
     protected boolean putWorker(Worker worker) {
@@ -74,9 +73,7 @@ public class PikachuCore extends AbstractTempMethod {
                                         log.error("core error", e);
                                     }
                                 });
-                                currentTime = System.currentTimeMillis();
                             }
-
                             if (worker instanceof BathWorker) {
                                 BathWorker bathWorker = (BathWorker) worker;
                                 pikachuPool.execute(() -> {
@@ -86,7 +83,6 @@ public class PikachuCore extends AbstractTempMethod {
                                         log.error("core error", e);
                                     }
                                 });
-                                currentTime = System.currentTimeMillis();
                             }
                         } else {
                             log.error("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
