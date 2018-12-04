@@ -83,9 +83,6 @@ public class TestPikachu {
         pikachuJobManage.regiest(generalWorker, 1L, 5L, TimeUnit.SECONDS);
         pikachu.start();
 
-        pikachu.stopAfterTime(30L);
-
-
     }
 
 }
