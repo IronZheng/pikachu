@@ -14,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static com.luway.pikachu.core.exception.Constant.NO_WORKER;
 
@@ -30,12 +27,12 @@ public class PikachuImpl implements Pikachu {
     private final static Logger logger = LoggerFactory.getLogger(PikachuImpl.class);
     private String name;
     private ExecutorService pikachuPool;
-
+    private ConcurrentHashMap<String, Worker> concurrentHashMap;
 
     /**
      * 默认最大线程数
      */
-    private Integer maxThreadNum = 10;
+    private Integer maxThreadNum = 5;
 
     /**
      * 默认核心线程数
@@ -64,6 +61,9 @@ public class PikachuImpl implements Pikachu {
         if (core == null) {
             core = new PikachuCore(pikachuPool);
         }
+        if (concurrentHashMap == null) {
+            concurrentHashMap = new ConcurrentHashMap<>();
+        }
 
         logger.debug("pikachu init ...");
         return this;
@@ -83,8 +83,29 @@ public class PikachuImpl implements Pikachu {
         if (null == worker) {
             throw new SimpleException(NO_WORKER);
         }
+        // 保存至内存中
+        putWork(worker);
         core.putWorker(worker);
         return this;
+    }
+
+    @Override
+    public Boolean putWork(Worker worker) {
+        if (concurrentHashMap.containsKey(worker.getId())) {
+            return false;
+        }
+        concurrentHashMap.put(worker.getId(), worker);
+        return true;
+    }
+
+    @Override
+    public void runWorkId(String id) {
+        Worker worker = concurrentHashMap.get(id);
+        if (worker != null) {
+            core.putWorker(worker);
+        } else {
+            logger.error("worker's id is null in map");
+        }
     }
 
     /**

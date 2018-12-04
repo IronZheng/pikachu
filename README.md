@@ -21,7 +21,7 @@ https://www.yuque.com/zhenggangmin/pikachu
     <dependency>
       <groupId>cn.luway</groupId>
       <artifactId>pikachu</artifactId>
-      <version>1.1.4</version>
+      <version>1.1.5</version>
     </dependency>
 ```
 ## 1.1.2~1.1.3

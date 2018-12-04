@@ -42,6 +42,20 @@ public interface Pikachu {
      */
     Pikachu regist(BathWorker worker);
 
+
+    /**
+     * 置入一个worker，但不运行
+     * @param worker
+     * @return
+     */
+    Boolean putWork(Worker worker);
+
+    /**
+     * 运行某个id对应的worker
+     * @param id
+     */
+    void runWorkId(String id);
+
     /**
      * 启动爬虫服务
      */
@@ -93,4 +107,6 @@ public interface Pikachu {
      * @return
      */
     Document getConnect(String url, MathUrl.Method method, Map<String, String> cookies) throws IOException;
+
+
 }

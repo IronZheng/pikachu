@@ -1,5 +1,6 @@
 import com.luway.pikachu.core.annotations.CssPath;
 import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.Xpath;
 
 /**
  * @author zhenggm
@@ -15,7 +16,7 @@ public class TestBean {
     @CssPath(selector = "body > div.content > div.leftContent > ul > li > div.info.clear > div.title > a")
     private String title;
 
-    @CssPath(selector = "body > div.content > div.leftContent > ul > li > div.info.clear > div.priceInfo > div > span")
+    @Xpath(xpath = "body > div.content > div.leftContent > ul > li > div.info.clear > div.priceInfo > div > span")
     private String price;
 
 }
