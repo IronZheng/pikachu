@@ -89,18 +89,47 @@ mvn clean install
 两种不同的注解可以一起使用。
 字段名 自定义即可。
 
+
+### 代码示例
+先创建一个目标model
+```java
+// 示例
+@MathUrl(url = "https://www.dailyenglishquote.com/", method = MathUrl.Method.GET)
+public class TestBean {
+
+    @CssPath(selector = "#content")
+    private String content;
+}
+```
+再创建一个输出pipeline
+```java
+// 示例
+public class TestPipeline extends BasePipeline<UrlConfig> {
+    public EverydayPipeline(UrlConfig urlConfig) {
+        super(urlConfig);
+    }
+
+    @Override
+    public void output(Map<String, Elements> result, String url) {
+        System.out.println(result.get("content"));
+    }
+}
+```
+最后启动爬虫，这里展示不同的注册方式。
 ```java
 // 示例
 public class TestPikachu {
     public static void main(String[] args) {
-        new Pikachu("test")
+       Pikachu pikachu = new Pikachu("test")
                 .init()
                 .regist(new Worker("test", TestBean.class)
-                        .addPipeline(new TestPipeline(new TestBean())))
-                .start();
-        
-        
-    // 批量URL工人    
+                        .addPipeline(new TestPipeline(new TestBean())));
+
+        // 注册批量url的Worker              
+       pikahcu.regist(getWorker());
+       pikachu.start();
+       
+    // Worker   
     GeneralWorker generalWorker =  new GeneralWorker("1", TestBean.class)
                     .addPipeline(new BasePipeline(TestBean.class) {
                         @Override
@@ -114,6 +143,30 @@ public class TestPikachu {
     pikachuJobManage.regiest(generalWorker,1L,5L,TimeUnit.SECONDS);
  
     }
+    
+    /**
+    * 分页批量Worker生成示例
+    * @return 
+    */
+     public BathWorker getWorker() {
+            int i = 1;
+            while (i < 100) {
+                String url = "https://hz.lianjia.com/ershoufang/xihu/pg" + i + "/";
+                urlList.add(url);
+                i++;
+            }
+            attr.put("title", new Target("title", "List",
+                    "body > div.content > div.leftContent > ul > li > div.info.clear", null));
+            attr.put("price", new Target("price", "String",
+                    "body > div.content > div.leftContent > ul > li > div.info.clear > div.priceInfo > div > span", null));
+    
+            worker = new BathWorker()
+                    .method(MathUrl.Method.GET)
+                    .urlList(urlList)
+                    .attr(attr)
+                    .addPipeline(new LianjiaPipeline(lianjiaRepository));
+            return worker;
+        }
 }
 ```
 
