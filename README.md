@@ -176,7 +176,7 @@ public class TestPikachu {
             attr.put("price", new Target("price", "String",
                     "body > div.content > div.leftContent > ul > li > div.info.clear > div.priceInfo > div > span", null));
     
-            worker = new BathWorker()
+            worker = new BathWorker("lj")
                     .method(MatchUrl.Method.GET)
                     .urlList(urlList)
                     .attr(attr)
