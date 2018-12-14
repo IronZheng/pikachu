@@ -1,9 +1,13 @@
 package com.luway.pikachu.core.engine;
 
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.worker.BathWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
+import org.jsoup.nodes.Document;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -32,10 +36,25 @@ public interface Pikachu {
 
     /**
      * 注册批量worker
+     *
      * @param worker
      * @return
      */
     Pikachu regist(BathWorker worker);
+
+
+    /**
+     * 置入一个worker，但不运行
+     * @param worker
+     * @return
+     */
+    Boolean putWork(Worker worker);
+
+    /**
+     * 运行某个id对应的worker
+     * @param id
+     */
+    void runWorkId(String id);
 
     /**
      * 启动爬虫服务
@@ -46,13 +65,6 @@ public interface Pikachu {
      * 停止服务
      */
     void stop();
-
-    /**
-     * 指定空闲多少时间之后，停止爬虫服务
-     *
-     * @param time
-     */
-    void stopAfterTime(Long time);
 
     /**
      * 设置最大线程数
@@ -72,7 +84,29 @@ public interface Pikachu {
 
     /**
      * 获取队列
+     *
      * @return
      */
     Queue<Worker> getQueue();
+
+
+    /**
+     * 获取html
+     *
+     * @param url
+     * @param method
+     * @return
+     */
+    Document getConnect(String url, MatchUrl.Method method) throws IOException;
+
+    /**
+     * 获取html,携带cookies
+     *
+     * @param url
+     * @param method
+     * @return
+     */
+    Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies) throws IOException;
+
+
 }

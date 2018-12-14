@@ -1,4 +1,4 @@
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.engine.impl.PikachuImpl;
 import com.luway.pikachu.core.pipeline.BasePipeline;
@@ -64,8 +64,8 @@ public class TestPikachu {
                 .setCoreNum(10)
                 .setMaxThreadNum(20)
                 .init()
-                .regist(new BathWorker()
-                        .method(MathUrl.Method.GET)
+                .regist(new BathWorker("lj")
+                        .method(MatchUrl.Method.GET)
                         .urlList(urlList)
                         .attr(attr)
                         .addPipeline(new TestPipeline(new TestBean())));
@@ -82,9 +82,6 @@ public class TestPikachu {
 
         pikachuJobManage.regiest(generalWorker, 1L, 5L, TimeUnit.SECONDS);
         pikachu.start();
-
-        pikachu.stopAfterTime(30L);
-
 
     }
 

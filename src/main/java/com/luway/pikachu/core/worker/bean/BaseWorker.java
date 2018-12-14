@@ -1,6 +1,6 @@
 package com.luway.pikachu.core.worker.bean;
 
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.annotations.WorkerType;
 import com.luway.pikachu.core.pipeline.BasePipeline;
 
@@ -22,7 +22,7 @@ public class BaseWorker {
     public List<String> urlList;
     public boolean loadJs;
 
-    private MathUrl.Method method;
+    private MatchUrl.Method method;
     private Map<String, String> cookies;
 
     private WorkerType type;
@@ -36,11 +36,11 @@ public class BaseWorker {
         this.type = type;
     }
 
-    public MathUrl.Method getMethod() {
+    public MatchUrl.Method getMethod() {
         return method;
     }
 
-    protected void setMethod(MathUrl.Method method) {
+    protected void setMethod(MatchUrl.Method method) {
         this.method = method;
     }
 

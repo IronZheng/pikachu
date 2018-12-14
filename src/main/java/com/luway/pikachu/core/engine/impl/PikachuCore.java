@@ -3,7 +3,7 @@ package com.luway.pikachu.core.engine.impl;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.engine.AbstractTempMethod;
 import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.BathWorker;
@@ -42,7 +42,6 @@ public class PikachuCore extends AbstractTempMethod {
     private final static Logger log = LoggerFactory.getLogger(PikachuCore.class);
     private Document doc;
     private volatile Boolean flag = true;
-    private volatile Long currentTime;
     private Long stopTime = 30L;
 
     private BlockingQueue<Worker> workerQueue;
@@ -51,7 +50,6 @@ public class PikachuCore extends AbstractTempMethod {
     public PikachuCore(ExecutorService pikachuPool) {
         this.workerQueue = new ArrayBlockingQueue<>(1024);
         this.pikachuPool = pikachuPool;
-        currentTime = System.currentTimeMillis();
     }
 
     protected boolean putWorker(Worker worker) {
@@ -65,38 +63,30 @@ public class PikachuCore extends AbstractTempMethod {
                 while (flag) {
                     try {
                         Worker worker = workerQueue.take();
-                        if (null == worker) {
-                            judgeTime();
-                        } else {
-                            if (worker.validate()) {
-
-                                if (worker instanceof GeneralWorker) {
-                                    GeneralWorker generalWorker = (GeneralWorker) worker;
-                                    pikachuPool.execute(() -> {
-                                        try {
-                                            load(generalWorker);
-                                        } catch (Exception e) {
-                                            log.error("core error", e);
-                                        }
-                                    });
-                                    currentTime = System.currentTimeMillis();
-                                }
-
-                                if (worker instanceof BathWorker) {
-                                    BathWorker bathWorker = (BathWorker) worker;
-                                    pikachuPool.execute(() -> {
-                                        try {
-                                            load(bathWorker);
-                                        } catch (Exception e) {
-                                            log.error("core error", e);
-                                        }
-                                    });
-                                    currentTime = System.currentTimeMillis();
-                                }
-                            } else {
-                                log.error("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
-                                throw new Exception("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
+                        if (worker.validate()) {
+                            if (worker instanceof GeneralWorker) {
+                                GeneralWorker generalWorker = (GeneralWorker) worker;
+                                pikachuPool.execute(() -> {
+                                    try {
+                                        load(generalWorker);
+                                    } catch (Exception e) {
+                                        log.error("core error", e);
+                                    }
+                                });
                             }
+                            if (worker instanceof BathWorker) {
+                                BathWorker bathWorker = (BathWorker) worker;
+                                pikachuPool.execute(() -> {
+                                    try {
+                                        load(bathWorker);
+                                    } catch (Exception e) {
+                                        log.error("core error", e);
+                                    }
+                                });
+                            }
+                        } else {
+                            log.error("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
+                            throw new Exception("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
                         }
                     } catch (Exception e) {
                         log.error("core error", e);
@@ -129,7 +119,7 @@ public class PikachuCore extends AbstractTempMethod {
     private void exector(String url, BathWorker worker) throws Exception {
         sleep();
         Document doc = null;
-        if (MathUrl.Method.GET.equals(worker.getMethod())) {
+        if (MatchUrl.Method.GET.equals(worker.getMethod())) {
             if (worker.getCookies() != null) {
                 doc = getConnection(url)
                         .cookies(worker.getCookies())
@@ -137,7 +127,7 @@ public class PikachuCore extends AbstractTempMethod {
             } else {
                 doc = getConnection(url).get();
             }
-        } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+        } else if (MatchUrl.Method.POST.equals(worker.getMethod())) {
             if (worker.getCookies() != null) {
                 doc = getConnection(url)
                         .cookies(worker.getCookies())
@@ -200,19 +190,19 @@ public class PikachuCore extends AbstractTempMethod {
      */
     private void loadHtml(GeneralWorker worker) throws Exception {
         if (worker.getCookies() == null) {
-            if (MathUrl.Method.GET.equals(worker.getMethod())) {
+            if (MatchUrl.Method.GET.equals(worker.getMethod())) {
                 doc = getConnection(worker.getUrl())
                         .get();
-            } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+            } else if (MatchUrl.Method.POST.equals(worker.getMethod())) {
                 doc = getConnection(worker.getUrl())
                         .post();
             }
         } else {
-            if (MathUrl.Method.GET.equals(worker.getMethod())) {
+            if (MatchUrl.Method.GET.equals(worker.getMethod())) {
                 doc = getConnection(worker.getUrl())
                         .cookies(worker.getCookies())
                         .get();
-            } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+            } else if (MatchUrl.Method.POST.equals(worker.getMethod())) {
                 doc = getConnection(worker.getUrl())
                         .cookies(worker.getCookies())
                         .post();
@@ -269,34 +259,23 @@ public class PikachuCore extends AbstractTempMethod {
         pikachuPool.shutdown();
     }
 
-    public void stopAfterTime(Long time) {
-        this.stopTime = time;
-    }
-
-    private void judgeTime() {
-        Long nowDate = System.currentTimeMillis();
-        if ((nowDate - currentTime) > (stopTime * 1000)) {
-            this.stop();
-        }
-    }
-
     @Override
-    protected Document getConnect(String url, String method) throws IOException {
-        if (MathUrl.Method.GET.equals(method)) {
+    protected Document getConnect(String url, MatchUrl.Method method) throws IOException {
+        if (MatchUrl.Method.GET.equals(method)) {
             doc = getConnection(url).get();
-        } else if (MathUrl.Method.POST.equals(method)) {
+        } else if (MatchUrl.Method.POST.equals(method)) {
             doc = getConnection(url).post();
         }
         return doc;
     }
 
     @Override
-    protected Document getConnect(String url, String method, Map<String, String> cookies) throws IOException {
-        if (MathUrl.Method.GET.equals(method)) {
+    protected Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies) throws IOException {
+        if (MatchUrl.Method.GET.equals(method)) {
             doc = getConnection(url)
                     .cookies(cookies)
                     .get();
-        } else if (MathUrl.Method.POST.equals(method)) {
+        } else if (MatchUrl.Method.POST.equals(method)) {
             doc = getConnection(url)
                     .cookies(cookies)
                     .post();

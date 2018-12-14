@@ -1,19 +1,20 @@
 package com.luway.pikachu.core.engine.impl;
 
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.engine.PiakchuPoolFactory;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.BathWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static com.luway.pikachu.core.exception.Constant.NO_WORKER;
 
@@ -26,12 +27,12 @@ public class PikachuImpl implements Pikachu {
     private final static Logger logger = LoggerFactory.getLogger(PikachuImpl.class);
     private String name;
     private ExecutorService pikachuPool;
-
+    private ConcurrentHashMap<String, Worker> concurrentHashMap;
 
     /**
      * 默认最大线程数
      */
-    private Integer maxThreadNum = 10;
+    private Integer maxThreadNum = 5;
 
     /**
      * 默认核心线程数
@@ -60,6 +61,9 @@ public class PikachuImpl implements Pikachu {
         if (core == null) {
             core = new PikachuCore(pikachuPool);
         }
+        if (concurrentHashMap == null) {
+            concurrentHashMap = new ConcurrentHashMap<>();
+        }
 
         logger.debug("pikachu init ...");
         return this;
@@ -79,8 +83,29 @@ public class PikachuImpl implements Pikachu {
         if (null == worker) {
             throw new SimpleException(NO_WORKER);
         }
+        // 保存至内存中
+        putWork(worker);
         core.putWorker(worker);
         return this;
+    }
+
+    @Override
+    public Boolean putWork(Worker worker) {
+        if (concurrentHashMap.containsKey(worker.getId())) {
+            return false;
+        }
+        concurrentHashMap.put(worker.getId(), worker);
+        return true;
+    }
+
+    @Override
+    public void runWorkId(String id) {
+        Worker worker = concurrentHashMap.get(id);
+        if (worker != null) {
+            core.putWorker(worker);
+        } else {
+            logger.error("worker's id is null in map");
+        }
     }
 
     /**
@@ -103,17 +128,6 @@ public class PikachuImpl implements Pikachu {
         core.stop();
     }
 
-    /**
-     * 在所有任务都结束且设置的时间内没有新任务则结束爬虫线程。
-     * 推荐使用
-     *
-     * @param time
-     */
-    @Override
-    public void stopAfterTime(Long time) {
-        core.stopAfterTime(time);
-    }
-
     @Override
     public PikachuImpl setMaxThreadNum(Integer maxThreadNum) {
         this.maxThreadNum = maxThreadNum;
@@ -129,6 +143,16 @@ public class PikachuImpl implements Pikachu {
     @Override
     public Queue<Worker> getQueue() {
         return core.getQueue();
+    }
+
+    @Override
+    public Document getConnect(String url, MatchUrl.Method method) throws IOException {
+        return this.core.getConnect(url, method);
+    }
+
+    @Override
+    public Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies) throws IOException {
+        return this.core.getConnect(url, method, cookies);
     }
 
 }

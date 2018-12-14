@@ -1,6 +1,6 @@
 package com.luway.pikachu.core.worker;
 
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.annotations.WorkerType;
 import com.luway.pikachu.core.pipeline.BasePipeline;
 import com.luway.pikachu.core.worker.bean.BaseWorker;
@@ -17,7 +17,8 @@ import java.util.Map;
 
 public class BathWorker extends BaseWorker implements Worker {
 
-    public BathWorker() {
+    public BathWorker(String id) {
+        this.id = id;
         super.setType(WorkerType.BATCH);
     }
 
@@ -53,7 +54,7 @@ public class BathWorker extends BaseWorker implements Worker {
         return this;
     }
 
-    public BathWorker method(MathUrl.Method method) {
+    public BathWorker method(MatchUrl.Method method) {
         super.setMethod(method);
         return this;
     }

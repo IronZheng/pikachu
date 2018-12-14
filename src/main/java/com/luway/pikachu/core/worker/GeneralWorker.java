@@ -1,7 +1,7 @@
 package com.luway.pikachu.core.worker;
 
 import com.luway.pikachu.core.annotations.CssPath;
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.annotations.WorkerType;
 import com.luway.pikachu.core.annotations.Xpath;
 import com.luway.pikachu.core.exception.SimpleException;
@@ -40,7 +40,7 @@ public class GeneralWorker extends BaseWorker implements Worker {
     }
 
     private GeneralWorker load(Class<?> bean) {
-        MathUrl u = bean.getAnnotation(MathUrl.class);
+        MatchUrl u = bean.getAnnotation(MatchUrl.class);
         log.debug(bean.getName() + "is load");
         this.url = u.url();
         if (this.url == null) {

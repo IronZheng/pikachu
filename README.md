@@ -13,20 +13,39 @@ github：https://github.com/Steelzheng/pikachu
 
 开源中国：https://gitee.com/ironzheng/pikachu
 
+# 文档地址
+https://www.yuque.com/zhenggangmin/pikachu
+
 中央仓库Maven，此处版本号为最新（随时更新）
 ```$xml
     <dependency>
       <groupId>cn.luway</groupId>
       <artifactId>pikachu</artifactId>
-      <version>1.1.4</version>
+      <version>1.1.5</version>
     </dependency>
 ```
+计划后续将要加入的功能：
+
+动态地址池代理，防止单一IP被封禁。
+
+分布式（考虑中，还未定)
+
+其他
+
+## 1.1.4~1.1.5
+加入了预置Work，可以在需要启动的时候，直接调用pikachu.runWorkId("id")来运行Worker。灵活性加大。这个功能的maven版本号还没发布，应该和下个版本一起发布了。仓库代码已更新。
+
+升级了jsoup版本号，发现新老版本的在流操作上接口不兼容，所以升级至最新。
+
+移除了空闲停止爬虫的接口，改为主动停止。因为检测空闲时间会让cpu轮询空转，所以还是阻塞队列吧。
+
+其他一些不大不小的优化。
+
 ## 1.1.2~1.1.3
 
 补丁升级
 
 修复定时管理只能注册常用worker，现支持两种模式。
-
 
 ### 1.1.1 
 1.1.1 版本功能介绍，相对预览版，修正了一些BUG，提升稳定性。
@@ -77,7 +96,7 @@ mvn clean install
 先配置好抓取目标的bean。
 
 ### 注解说明
-@MathUrl 类注解，里面有两个参数，url是目标数据的url地址，请填写完善。method是请求方式。
+@MatchUrl 类注解，里面有两个参数，url是目标数据的url地址，请填写完善。method是请求方式。
 
 @CssPath 方法注解，使用select语法。 
 
@@ -86,18 +105,47 @@ mvn clean install
 两种不同的注解可以一起使用。
 字段名 自定义即可。
 
+
+### 代码示例
+先创建一个目标model
+```java
+// 示例
+@MatchUrl(url = "https://www.dailyenglishquote.com/", method = MatchUrl.Method.GET)
+public class TestBean {
+
+    @CssPath(selector = "#content")
+    private String content;
+}
+```
+再创建一个输出pipeline
+```java
+// 示例
+public class TestPipeline extends BasePipeline<UrlConfig> {
+    public EverydayPipeline(UrlConfig urlConfig) {
+        super(urlConfig);
+    }
+
+    @Override
+    public void output(Map<String, Elements> result, String url) {
+        System.out.println(result.get("content"));
+    }
+}
+```
+最后启动爬虫，这里展示不同的注册方式。
 ```java
 // 示例
 public class TestPikachu {
     public static void main(String[] args) {
-        new Pikachu("test")
+       Pikachu pikachu = new Pikachu("test")
                 .init()
                 .regist(new Worker("test", TestBean.class)
-                        .addPipeline(new TestPipeline(new TestBean())))
-                .start();
-        
-        
-    // 批量URL工人    
+                        .addPipeline(new TestPipeline(new TestBean())));
+
+        // 注册批量url的Worker              
+       pikahcu.regist(getWorker());
+       pikachu.start();
+       
+    // Worker   
     GeneralWorker generalWorker =  new GeneralWorker("1", TestBean.class)
                     .addPipeline(new BasePipeline(TestBean.class) {
                         @Override
@@ -111,6 +159,30 @@ public class TestPikachu {
     pikachuJobManage.regiest(generalWorker,1L,5L,TimeUnit.SECONDS);
  
     }
+    
+    /**
+    * 分页批量Worker生成示例
+    * @return 
+    */
+     public BathWorker getWorker() {
+            int i = 1;
+            while (i < 100) {
+                String url = "https://hz.lianjia.com/ershoufang/xihu/pg" + i + "/";
+                urlList.add(url);
+                i++;
+            }
+            attr.put("title", new Target("title", "List",
+                    "body > div.content > div.leftContent > ul > li > div.info.clear", null));
+            attr.put("price", new Target("price", "String",
+                    "body > div.content > div.leftContent > ul > li > div.info.clear > div.priceInfo > div > span", null));
+    
+            worker = new BathWorker()
+                    .method(MatchUrl.Method.GET)
+                    .urlList(urlList)
+                    .attr(attr)
+                    .addPipeline(new LianjiaPipeline(lianjiaRepository));
+            return worker;
+        }
 }
 ```
 
