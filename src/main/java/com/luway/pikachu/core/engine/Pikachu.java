@@ -1,6 +1,6 @@
 package com.luway.pikachu.core.engine;
 
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.worker.BathWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
@@ -97,7 +97,7 @@ public interface Pikachu {
      * @param method
      * @return
      */
-    Document getConnect(String url, MathUrl.Method method) throws IOException;
+    Document getConnect(String url, MatchUrl.Method method) throws IOException;
 
     /**
      * 获取html,携带cookies
@@ -106,7 +106,7 @@ public interface Pikachu {
      * @param method
      * @return
      */
-    Document getConnect(String url, MathUrl.Method method, Map<String, String> cookies) throws IOException;
+    Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies) throws IOException;
 
 
 }

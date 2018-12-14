@@ -1,6 +1,6 @@
 package com.luway.pikachu.core.engine.impl;
 
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.engine.PiakchuPoolFactory;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.exception.SimpleException;
@@ -146,12 +146,12 @@ public class PikachuImpl implements Pikachu {
     }
 
     @Override
-    public Document getConnect(String url, MathUrl.Method method) throws IOException {
+    public Document getConnect(String url, MatchUrl.Method method) throws IOException {
         return this.core.getConnect(url, method);
     }
 
     @Override
-    public Document getConnect(String url, MathUrl.Method method, Map<String, String> cookies) throws IOException {
+    public Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies) throws IOException {
         return this.core.getConnect(url, method, cookies);
     }
 

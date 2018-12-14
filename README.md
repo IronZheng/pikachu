@@ -80,7 +80,7 @@ mvn clean install
 先配置好抓取目标的bean。
 
 ### 注解说明
-@MathUrl 类注解，里面有两个参数，url是目标数据的url地址，请填写完善。method是请求方式。
+@MatchUrl 类注解，里面有两个参数，url是目标数据的url地址，请填写完善。method是请求方式。
 
 @CssPath 方法注解，使用select语法。 
 
@@ -94,7 +94,7 @@ mvn clean install
 先创建一个目标model
 ```java
 // 示例
-@MathUrl(url = "https://www.dailyenglishquote.com/", method = MathUrl.Method.GET)
+@MatchUrl(url = "https://www.dailyenglishquote.com/", method = MatchUrl.Method.GET)
 public class TestBean {
 
     @CssPath(selector = "#content")
@@ -161,7 +161,7 @@ public class TestPikachu {
                     "body > div.content > div.leftContent > ul > li > div.info.clear > div.priceInfo > div > span", null));
     
             worker = new BathWorker()
-                    .method(MathUrl.Method.GET)
+                    .method(MatchUrl.Method.GET)
                     .urlList(urlList)
                     .attr(attr)
                     .addPipeline(new LianjiaPipeline(lianjiaRepository));

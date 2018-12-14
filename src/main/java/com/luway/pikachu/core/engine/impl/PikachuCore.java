@@ -3,7 +3,7 @@ package com.luway.pikachu.core.engine.impl;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.engine.AbstractTempMethod;
 import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.BathWorker;
@@ -119,7 +119,7 @@ public class PikachuCore extends AbstractTempMethod {
     private void exector(String url, BathWorker worker) throws Exception {
         sleep();
         Document doc = null;
-        if (MathUrl.Method.GET.equals(worker.getMethod())) {
+        if (MatchUrl.Method.GET.equals(worker.getMethod())) {
             if (worker.getCookies() != null) {
                 doc = getConnection(url)
                         .cookies(worker.getCookies())
@@ -127,7 +127,7 @@ public class PikachuCore extends AbstractTempMethod {
             } else {
                 doc = getConnection(url).get();
             }
-        } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+        } else if (MatchUrl.Method.POST.equals(worker.getMethod())) {
             if (worker.getCookies() != null) {
                 doc = getConnection(url)
                         .cookies(worker.getCookies())
@@ -190,19 +190,19 @@ public class PikachuCore extends AbstractTempMethod {
      */
     private void loadHtml(GeneralWorker worker) throws Exception {
         if (worker.getCookies() == null) {
-            if (MathUrl.Method.GET.equals(worker.getMethod())) {
+            if (MatchUrl.Method.GET.equals(worker.getMethod())) {
                 doc = getConnection(worker.getUrl())
                         .get();
-            } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+            } else if (MatchUrl.Method.POST.equals(worker.getMethod())) {
                 doc = getConnection(worker.getUrl())
                         .post();
             }
         } else {
-            if (MathUrl.Method.GET.equals(worker.getMethod())) {
+            if (MatchUrl.Method.GET.equals(worker.getMethod())) {
                 doc = getConnection(worker.getUrl())
                         .cookies(worker.getCookies())
                         .get();
-            } else if (MathUrl.Method.POST.equals(worker.getMethod())) {
+            } else if (MatchUrl.Method.POST.equals(worker.getMethod())) {
                 doc = getConnection(worker.getUrl())
                         .cookies(worker.getCookies())
                         .post();
@@ -260,22 +260,22 @@ public class PikachuCore extends AbstractTempMethod {
     }
 
     @Override
-    protected Document getConnect(String url, MathUrl.Method method) throws IOException {
-        if (MathUrl.Method.GET.equals(method)) {
+    protected Document getConnect(String url, MatchUrl.Method method) throws IOException {
+        if (MatchUrl.Method.GET.equals(method)) {
             doc = getConnection(url).get();
-        } else if (MathUrl.Method.POST.equals(method)) {
+        } else if (MatchUrl.Method.POST.equals(method)) {
             doc = getConnection(url).post();
         }
         return doc;
     }
 
     @Override
-    protected Document getConnect(String url, MathUrl.Method method, Map<String, String> cookies) throws IOException {
-        if (MathUrl.Method.GET.equals(method)) {
+    protected Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies) throws IOException {
+        if (MatchUrl.Method.GET.equals(method)) {
             doc = getConnection(url)
                     .cookies(cookies)
                     .get();
-        } else if (MathUrl.Method.POST.equals(method)) {
+        } else if (MatchUrl.Method.POST.equals(method)) {
             doc = getConnection(url)
                     .cookies(cookies)
                     .post();
