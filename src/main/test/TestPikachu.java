@@ -1,4 +1,4 @@
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.engine.impl.PikachuImpl;
 import com.luway.pikachu.core.pipeline.BasePipeline;
@@ -65,7 +65,7 @@ public class TestPikachu {
                 .setMaxThreadNum(20)
                 .init()
                 .regist(new BathWorker()
-                        .method(MathUrl.Method.GET)
+                        .method(MatchUrl.Method.GET)
                         .urlList(urlList)
                         .attr(attr)
                         .addPipeline(new TestPipeline(new TestBean())));

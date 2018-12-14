@@ -1,5 +1,5 @@
 import com.luway.pikachu.core.annotations.CssPath;
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.annotations.Xpath;
 
 /**
@@ -7,7 +7,7 @@ import com.luway.pikachu.core.annotations.Xpath;
  * @create 2018-04-24 17:12
  **/
 
-@MathUrl(url = "https://hz.lianjia.com/ershoufang/xihu/pg2/", method = MathUrl.Method.GET)
+@MatchUrl(url = "https://hz.lianjia.com/ershoufang/xihu/pg2/", method = MatchUrl.Method.GET)
 public class TestBean {
 
 //    @Xpath(xpath = "//*[@id=\"content\"]/div/div[1]/div[1]/div[2]/div/div/ul/li/node()")

@@ -1,4 +1,4 @@
-import com.luway.pikachu.core.annotations.MathUrl;
+import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.engine.impl.PikachuImpl;
 import org.jsoup.nodes.Document;
@@ -22,7 +22,7 @@ public class ConnectTest {
                 .setCoreNum(10)
                 .setMaxThreadNum(20)
                 .init();
-        Document document = pikachu.getConnect("http://www.baidu.com",MathUrl.Method.GET);
+        Document document = pikachu.getConnect("http://www.baidu.com",MatchUrl.Method.GET);
         System.out.println(document);
     }
 }
