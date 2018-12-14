@@ -64,7 +64,7 @@ public class TestPikachu {
                 .setCoreNum(10)
                 .setMaxThreadNum(20)
                 .init()
-                .regist(new BathWorker()
+                .regist(new BathWorker("lj")
                         .method(MatchUrl.Method.GET)
                         .urlList(urlList)
                         .attr(attr)

@@ -17,7 +17,8 @@ import java.util.Map;
 
 public class BathWorker extends BaseWorker implements Worker {
 
-    public BathWorker() {
+    public BathWorker(String id) {
+        this.id = id;
         super.setType(WorkerType.BATCH);
     }
 
