@@ -166,7 +166,7 @@ public class PikachuCore extends AbstractTempMethod {
     private void loadJs(GeneralWorker worker) throws Exception {
         // HtmlUnit 模拟浏览器
         WebClient wc = new WebClient(BrowserVersion.FIREFOX_52);
-        wc.setJavaScriptTimeout(5000);
+        wc.setJavaScriptTimeout(100000);
         wc.getOptions().setUseInsecureSSL(true);//接受任何主机连接 无论是否有有效证书
         wc.getOptions().setJavaScriptEnabled(true);//设置支持javascript脚本
         wc.getOptions().setCssEnabled(false);//禁用css支持

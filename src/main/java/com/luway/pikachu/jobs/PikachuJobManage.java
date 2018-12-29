@@ -56,7 +56,6 @@ public class PikachuJobManage {
                     }
                 }
             };
-
             taskPool.scheduleAtFixedRate(task, startTime, space, unit);
             return true;
         } catch (Exception e) {
@@ -65,7 +64,36 @@ public class PikachuJobManage {
     }
 
     /**
-     * 关闭定时任务线程池
+     * 定时运行已注册任务
+     * 注意这里如果预先注册的定时任务被删除或者被修改，可能会导致无法运行，或者与预期结果不一致情况。
+     * 请做好检查。
+     *
+     * @param workerId
+     * @param startTime
+     * @param space
+     * @param unit
+     * @return
+     */
+    public boolean runScheduleJob(String workerId, Long startTime, Long space, TimeUnit unit) throws Exception {
+        try {
+            String id = SnowFlakeUtil.getId();
+            logger.info("注册定时任务，id为【{}}】", id);
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    pikachu.runWorkId(workerId);
+                }
+            };
+            taskPool.scheduleAtFixedRate(task, startTime, space, unit);
+            return true;
+        } catch (Exception e) {
+            throw new Exception("runScheduleJob error", e);
+        }
+    }
+
+
+    /**
+     * 关闭定时任务线程池，这个会导致所有任务直接结束。
      *
      * @return
      */
