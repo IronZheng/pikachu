@@ -33,6 +33,7 @@ https://www.yuque.com/zhenggangmin/pikachu
 其他
 
 #版本动态
+
 ## 1.1.6
 加入了动态地址池代理，可以绕开某些针对IP的拦截。默认关闭，需要打开。
 
@@ -95,7 +96,7 @@ https://www.yuque.com/zhenggangmin/pikachu
 ## 调试方式
 安装Java环境，clone 代码 
 ```$xslt
-git clone https://gitee.com/ironzheng/pikachuImpl.git
+git clone https://gitee.com/ironzheng/pikachu.git
 mvn clean install 
 ```
 
