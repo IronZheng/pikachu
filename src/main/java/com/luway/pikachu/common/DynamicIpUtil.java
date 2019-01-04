@@ -27,17 +27,21 @@ public class DynamicIpUtil {
     /**
      * 更换动态ip
      */
-    public static void changeMyIp() throws IOException {
-        String[] ipAndPort = getDynamicIpAndPort();
-        String ip = ipAndPort[0];
-        String port = ipAndPort[1];
-        System.setProperty("http.maxRedirects", "50");
-        System.setProperty("https.maxRedirects", "50");
-        System.getProperties().setProperty("proxySet", "true");
-        System.getProperties().setProperty("http.proxyHost", ip);
-        System.getProperties().setProperty("http.proxyPort", port);
-        System.getProperties().setProperty("https.proxyHost", ip);
-        System.getProperties().setProperty("https.proxyPort", port);
+    public static void changeMyIp() {
+        try {
+            String[] ipAndPort = getDynamicIpAndPort();
+            String ip = ipAndPort[0];
+            String port = ipAndPort[1];
+            System.setProperty("http.maxRedirects", "50");
+            System.setProperty("https.maxRedirects", "50");
+            System.getProperties().setProperty("proxySet", "true");
+            System.getProperties().setProperty("http.proxyHost", ip);
+            System.getProperties().setProperty("http.proxyPort", port);
+            System.getProperties().setProperty("https.proxyHost", ip);
+            System.getProperties().setProperty("https.proxyPort", port);
+        } catch (IOException e) {
+            log.error("changIp error", e);
+        }
     }
 
     /**

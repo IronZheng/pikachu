@@ -83,6 +83,20 @@ public interface Pikachu {
     Pikachu setCoreNum(Integer coreNum);
 
     /**
+     * 是否开启动态ip代理
+     * @param openIpProxy
+     * @return
+     */
+    Pikachu setOpenIpProxy(Boolean openIpProxy);
+
+    /**
+     * 是否开启随机暂停，如果开启每次访问站点会随机休眠减少压力。
+     * @param sleep
+     * @return
+     */
+    Pikachu setSleep(Boolean sleep);
+
+    /**
      * 获取队列
      *
      * @return
@@ -108,5 +122,14 @@ public interface Pikachu {
      */
     Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies) throws IOException;
 
+
+    /**
+     * 获取html,携带cookies
+     *
+     * @param url
+     * @param method
+     * @return
+     */
+    Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies,Map<String,String> heads) throws IOException;
 
 }

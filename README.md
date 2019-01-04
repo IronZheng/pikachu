@@ -21,16 +21,24 @@ https://www.yuque.com/zhenggangmin/pikachu
     <dependency>
       <groupId>cn.luway</groupId>
       <artifactId>pikachu</artifactId>
-      <version>1.1.5</version>
+      <version>1.1.6</version>
     </dependency>
 ```
 计划后续将要加入的功能：
 
-动态地址池代理，防止单一IP被封禁。
+动态地址池代理，防止单一IP被封禁。（完成）
 
 分布式（考虑中，还未定)
 
 其他
+
+#版本动态
+## 1.1.6
+加入了动态地址池代理，可以绕开某些针对IP的拦截。默认关闭，需要打开。
+
+加入随机休眠开关，默认关闭，开启时每次访问站点会随机休眠，减少批量业务对站点的压力。
+
+优化了一些逻辑，删除一些无用属性。
 
 ## 1.1.4~1.1.5
 加入了预置Work，可以在需要启动的时候，直接调用pikachu.runWorkId("id")来运行Worker。灵活性加大。这个功能的maven版本号还没发布，应该和下个版本一起发布了。仓库代码已更新。
