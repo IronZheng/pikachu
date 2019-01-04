@@ -29,6 +29,7 @@ public class PikachuImpl implements Pikachu {
     private ExecutorService pikachuPool;
     private ConcurrentHashMap<String, Worker> concurrentHashMap;
 
+
     /**
      * 默认最大线程数
      */
@@ -39,7 +40,12 @@ public class PikachuImpl implements Pikachu {
      */
     private Integer coreNum = 3;
 
-    private PikachuCore core;
+    private Core core;
+
+    // 开启代理开关
+    private volatile Boolean defaultOpenIpProxy = false;
+    // 随机暂停开关
+    private volatile Boolean defaultSleepFlag = false;
 
     public PikachuImpl(String name) {
         this.name = name;
@@ -59,7 +65,7 @@ public class PikachuImpl implements Pikachu {
                     , new ThreadPoolExecutor.AbortPolicy());
         }
         if (core == null) {
-            core = new PikachuCore(pikachuPool);
+            core = new Core(pikachuPool, defaultOpenIpProxy, defaultSleepFlag);
         }
         if (concurrentHashMap == null) {
             concurrentHashMap = new ConcurrentHashMap<>();
@@ -141,6 +147,18 @@ public class PikachuImpl implements Pikachu {
     }
 
     @Override
+    public Pikachu setOpenIpProxy(Boolean openIpProxy) {
+        this.defaultOpenIpProxy = openIpProxy;
+        return this;
+    }
+
+    @Override
+    public Pikachu setSleep(Boolean sleep) {
+        this.defaultSleepFlag = sleep;
+        return this;
+    }
+
+    @Override
     public Queue<Worker> getQueue() {
         return core.getQueue();
     }
@@ -153,6 +171,11 @@ public class PikachuImpl implements Pikachu {
     @Override
     public Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies) throws IOException {
         return this.core.getConnect(url, method, cookies);
+    }
+
+    @Override
+    public Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies, Map<String, String> heads) throws IOException {
+        return this.core.getConnect(url, method, cookies, heads);
     }
 
 }

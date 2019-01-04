@@ -30,6 +30,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 
+import static com.luway.pikachu.common.DynamicIpUtil.changeMyIp;
 import static com.luway.pikachu.common.TimeUtil.sleep;
 
 /**
@@ -38,18 +39,24 @@ import static com.luway.pikachu.common.TimeUtil.sleep;
  * @date : 下午3:31 2018/8/1
  */
 
-public class PikachuCore extends AbstractTempMethod {
-    private final static Logger log = LoggerFactory.getLogger(PikachuCore.class);
+public class Core extends AbstractTempMethod {
+    private final static Logger log = LoggerFactory.getLogger(Core.class);
     private Document doc;
     private volatile Boolean flag = true;
-    private Long stopTime = 30L;
+
+    // 开启代理开关
+    private volatile Boolean openIpProxy;
+    // 随机暂停开关
+    private volatile Boolean sleepFlag;
 
     private BlockingQueue<Worker> workerQueue;
     private ExecutorService pikachuPool;
 
-    public PikachuCore(ExecutorService pikachuPool) {
+    public Core(ExecutorService pikachuPool, Boolean openIpProxy, Boolean sleepFlag) {
         this.workerQueue = new ArrayBlockingQueue<>(1024);
         this.pikachuPool = pikachuPool;
+        this.openIpProxy = false;
+        this.sleepFlag = false;
     }
 
     protected boolean putWorker(Worker worker) {
@@ -61,9 +68,14 @@ public class PikachuCore extends AbstractTempMethod {
             @Override
             public void run() {
                 while (flag) {
+                    // 默认不开启代理IP地址池
+                    if (openIpProxy) {
+                        changeMyIp();
+                    }
                     try {
                         Worker worker = workerQueue.take();
                         if (worker.validate()) {
+
                             if (worker instanceof GeneralWorker) {
                                 GeneralWorker generalWorker = (GeneralWorker) worker;
                                 pikachuPool.execute(() -> {
@@ -166,12 +178,17 @@ public class PikachuCore extends AbstractTempMethod {
     private void loadJs(GeneralWorker worker) throws Exception {
         // HtmlUnit 模拟浏览器
         WebClient wc = new WebClient(BrowserVersion.FIREFOX_52);
-        wc.setJavaScriptTimeout(5000);
-        wc.getOptions().setUseInsecureSSL(true);//接受任何主机连接 无论是否有有效证书
-        wc.getOptions().setJavaScriptEnabled(true);//设置支持javascript脚本
-        wc.getOptions().setCssEnabled(false);//禁用css支持
-        wc.getOptions().setThrowExceptionOnScriptError(false);//js运行错误时不抛出异常
-        wc.getOptions().setTimeout(100000);//设置连接超时时间
+        wc.setJavaScriptTimeout(100000);
+        //接受任何主机连接 无论是否有有效证书
+        wc.getOptions().setUseInsecureSSL(true);
+        //设置支持javascript脚本
+        wc.getOptions().setJavaScriptEnabled(true);
+        //禁用css支持
+        wc.getOptions().setCssEnabled(false);
+        //js运行错误时不抛出异常
+        wc.getOptions().setThrowExceptionOnScriptError(false);
+        //设置连接超时时间
+        wc.getOptions().setTimeout(100000);
         wc.getOptions().setDoNotTrackEnabled(false);
         HtmlPage page = wc.getPage(worker.getUrl());
 
@@ -283,10 +300,26 @@ public class PikachuCore extends AbstractTempMethod {
         return doc;
     }
 
+    @Override
+    protected Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies, Map<String, String> headers) throws IOException {
+        if (MatchUrl.Method.GET.equals(method)) {
+            doc = getConnection(url)
+                    .cookies(cookies)
+                    .headers(headers)
+                    .get();
+        } else if (MatchUrl.Method.POST.equals(method)) {
+            doc = getConnection(url)
+                    .cookies(cookies)
+                    .headers(headers)
+                    .post();
+        }
+        return doc;
+    }
+
     private Connection getConnection(String url) {
-        try {
-            Thread.sleep(800);
-        } catch (InterruptedException e) {
+        // 随机暂停，防止抓取过快对站点造成过大压力
+        if (sleepFlag) {
+            sleep();
         }
         return Jsoup.connect(url).timeout(300000)
                 .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")

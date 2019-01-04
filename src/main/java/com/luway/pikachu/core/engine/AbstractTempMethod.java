@@ -39,6 +39,18 @@ public abstract class AbstractTempMethod {
     protected abstract Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies) throws IOException;
 
     /**
+     * 添加自定义cookies和headers，抓取页面内容
+     *
+     * @param url
+     * @param method
+     * @param cookies
+     * @return
+     * @throws IOException
+     */
+    protected abstract Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies,Map<String,String> headers) throws IOException;
+
+
+    /**
      * 获取队列
      *
      * @return
