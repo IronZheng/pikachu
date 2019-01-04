@@ -32,7 +32,7 @@ https://www.yuque.com/zhenggangmin/pikachu
 
 其他
 
-#版本动态
+# 版本动态
 
 ## 1.1.6
 加入了动态地址池代理，可以绕开某些针对IP的拦截。默认关闭，需要打开。
