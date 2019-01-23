@@ -39,7 +39,7 @@ public class DynamicIpUtil {
             System.getProperties().setProperty("http.proxyPort", port);
             System.getProperties().setProperty("https.proxyHost", ip);
             System.getProperties().setProperty("https.proxyPort", port);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("changIp error", e);
         }
     }
@@ -102,7 +102,7 @@ public class DynamicIpUtil {
                     }
                 }
                 return getDynamicIpAndPort();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("get DynamicIpError error info :\n {}", e);
             }
         }

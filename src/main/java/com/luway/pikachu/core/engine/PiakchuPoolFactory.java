@@ -11,12 +11,11 @@ public class PiakchuPoolFactory implements ThreadFactory {
 
     private int counter;
     private String name;
-    private static List<String> stats;
+    private static List<String> stats = new ArrayList<String>();;
 
     public PiakchuPoolFactory(String name) {
         counter = 0;
         this.name = name;
-        stats = new ArrayList<String>();
     }
 
     public static String getStas() {
