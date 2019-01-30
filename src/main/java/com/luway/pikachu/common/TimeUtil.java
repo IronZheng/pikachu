@@ -17,9 +17,4 @@ public class TimeUtil {
         }
     }
 
-    public static void main(String[] args) {
-        while (true) {
-            sleep();
-        }
-    }
 }
