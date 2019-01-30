@@ -23,7 +23,7 @@ https://www.yuque.com/zhenggangmin/pikachu
     <dependency>
       <groupId>cn.luway</groupId>
       <artifactId>pikachu</artifactId>
-      <version>1.1.6</version>
+      <version>1.1.7</version>
     </dependency>
 ```
 计划后续将要加入的功能：
