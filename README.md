@@ -1,3 +1,5 @@
+[![star](https://gitee.com/ironzheng/pikachu/badge/star.svg?theme=dark)](https://gitee.com/ironzheng/pikachu/stargazers)
+
 # pikachu
 皮卡丘，就决定是你了
 
