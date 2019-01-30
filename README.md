@@ -9,6 +9,8 @@
 
 JDK 版本 1.8
 
+API文档：https://apidoc.gitee.com/ironzheng/pikachu/
+
 github：https://github.com/Steelzheng/pikachu
 
 开源中国：https://gitee.com/ironzheng/pikachu
@@ -33,6 +35,9 @@ https://www.yuque.com/zhenggangmin/pikachu
 其他
 
 # 版本动态
+
+## 1.1.7
+细小改动，升级默认模拟浏览器版本。防止部分网站对老旧浏览器不兼容。
 
 ## 1.1.6
 加入了动态地址池代理，可以绕开某些针对IP的拦截。默认关闭，需要打开。
