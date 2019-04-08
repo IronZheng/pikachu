@@ -45,9 +45,9 @@ public class Core extends AbstractTempMethod {
     private volatile Boolean flag = true;
 
     // 开启代理开关
-    private volatile Boolean openIpProxy;
+    private volatile Boolean openIpProxy = false;
     // 随机暂停开关
-    private volatile Boolean sleepFlag;
+    private volatile Boolean sleepFlag = false;
 
     private BlockingQueue<Worker> workerQueue;
     private ExecutorService pikachuPool;
@@ -55,8 +55,8 @@ public class Core extends AbstractTempMethod {
     public Core(ExecutorService pikachuPool, Boolean openIpProxy, Boolean sleepFlag) {
         this.workerQueue = new ArrayBlockingQueue<>(1024);
         this.pikachuPool = pikachuPool;
-        this.openIpProxy = false;
-        this.sleepFlag = false;
+        this.openIpProxy = openIpProxy;
+        this.sleepFlag = sleepFlag;
     }
 
     protected boolean putWorker(Worker worker) {

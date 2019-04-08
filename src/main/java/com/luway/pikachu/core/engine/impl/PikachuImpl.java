@@ -42,9 +42,13 @@ public class PikachuImpl implements Pikachu {
 
     private Core core;
 
-    // 开启代理开关
+    /**
+     * 开启代理开关
+     */
     private volatile Boolean defaultOpenIpProxy = false;
-    // 随机暂停开关
+    /**
+     * 随机暂停开关
+     */
     private volatile Boolean defaultSleepFlag = false;
 
     public PikachuImpl(String name) {
