@@ -32,6 +32,27 @@
         <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -116,12 +137,12 @@
             <artifactId>p4maven-provider</artifactId>
             <version>1.0.6</version>
         </dependency>
-        <dependency>
-            <groupId>apache-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.1</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>apache-lang</groupId>-->
+<!--            <artifactId>commons-lang</artifactId>-->
+<!--            <version>2.1</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <distributionManagement>
@@ -152,7 +173,6 @@
             <id>release</id>
             <build>
                 <plugins>
-
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -238,9 +258,7 @@
             <id>clojars.org</id>
             <url>http://clojars.org/repo</url>
         </repository>
-
     </repositories>
-
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
