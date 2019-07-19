@@ -4,6 +4,7 @@ import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.worker.BathWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
+import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
@@ -132,4 +133,5 @@ public interface Pikachu {
      */
     Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies,Map<String,String> heads) throws IOException;
 
+    Connection getOnlyConnect();
 }

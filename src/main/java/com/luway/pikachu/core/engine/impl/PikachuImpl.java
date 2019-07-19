@@ -7,6 +7,7 @@ import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.BathWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
+import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,6 +181,13 @@ public class PikachuImpl implements Pikachu {
     @Override
     public Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies, Map<String, String> heads) throws IOException {
         return this.core.getConnect(url, method, cookies, heads);
+    }
+
+    @Override
+    public Connection getOnlyConnect() {
+        // todo S
+//        return this.core.getConnect();
+        return null;
     }
 
 }
