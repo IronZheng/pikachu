@@ -29,18 +29,16 @@ public class CustomWorker extends BaseWorker implements Worker {
     private final static Logger log = LoggerFactory.getLogger(CustomWorker.class);
 
     public CustomWorker(String id, String url, MatchUrl.Method method) {
-        this.id = id;
-        if (StringUtils.isEmpty(url)) {
-            throw new RuntimeException("[error] url can not be null");
-        }
-        super.setType(WorkerType.CUSTOM);
-        this.url = url;
-        this.setMethod(method);
+        init(id, url, method);
     }
 
     public CustomWorker(String url, MatchUrl.Method method) {
-        this.id = UUID.randomUUID().toString();
-        if (StringUtils.isEmpty(url)) {
+        init(UUID.randomUUID().toString(), url, method);
+    }
+
+    private void init(String id, String url, MatchUrl.Method method) {
+        this.id = id;
+        if (StringUtils.isEmpty(this.url)) {
             throw new RuntimeException("[error] url can not be null");
         }
         super.setType(WorkerType.CUSTOM);
@@ -92,7 +90,7 @@ public class CustomWorker extends BaseWorker implements Worker {
         return this;
     }
 
-    public CustomWorker loadJs(Boolean isLoad){
+    public CustomWorker loadJs(Boolean isLoad) {
         this.loadJs = isLoad;
         return this;
     }
