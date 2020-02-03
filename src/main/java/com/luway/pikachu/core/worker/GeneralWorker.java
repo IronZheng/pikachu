@@ -8,6 +8,7 @@ import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.pipeline.BasePipeline;
 import com.luway.pikachu.core.worker.bean.BaseWorker;
 import com.luway.pikachu.core.worker.bean.Target;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public class GeneralWorker extends BaseWorker implements Worker {
         MatchUrl u = bean.getAnnotation(MatchUrl.class);
         log.debug(bean.getName() + "is load");
         this.url = u.url();
-        if (this.url == null) {
+        if (StringUtils.isEmpty(this.url)) {
             throw new RuntimeException("[error] url can not be null");
         }
         super.setMethod(u.method());
@@ -60,7 +61,7 @@ public class GeneralWorker extends BaseWorker implements Worker {
                 if (fieldHasAnno) {
                     CssPath cssPath = field.getAnnotation(CssPath.class);
                     //输出注解属性
-                    Target t = new Target(field.getName(), field.getType().toString(), cssPath.selector(), null);
+                    Target t = new Target(field.getName().toString(), cssPath.selector(), null);
                     attr.put(field.getName(), t);
                     log.debug(field.getName() + ":" + field.getType().toString() + ":" + cssPath.selector());
                 }
@@ -68,7 +69,7 @@ public class GeneralWorker extends BaseWorker implements Worker {
                 if (fieldHasXpath) {
                     Xpath xpath = field.getAnnotation(Xpath.class);
                     //输出注解属性
-                    Target t = new Target(field.getName(), field.getType().toString(), null, xpath.xpath());
+                    Target t = new Target(field.getName(), null, xpath.xpath());
                     attr.put(field.getName(), t);
                     log.debug(field.getName() + ":" + field.getType().toString() + ":" + xpath.xpath());
                 }

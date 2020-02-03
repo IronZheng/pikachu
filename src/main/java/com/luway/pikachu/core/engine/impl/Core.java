@@ -7,6 +7,7 @@ import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.engine.AbstractTempMethod;
 import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.BathWorker;
+import com.luway.pikachu.core.worker.CustomWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
 import com.luway.pikachu.core.worker.bean.Target;
@@ -96,6 +97,8 @@ public class Core extends AbstractTempMethod {
                                     }
                                 });
                             }
+
+
                         } else {
                             log.error("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");
                             throw new Exception("this worker's pip is null.[WORKER ID: " + worker.getId() + "]");

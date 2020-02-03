@@ -22,6 +22,9 @@ public abstract class BasePipeline<T> {
         this.bean = t;
     }
 
+    public BasePipeline() {
+    }
+
     /**
      * out
      * @param result
