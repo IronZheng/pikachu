@@ -91,4 +91,9 @@ public class CustomWorker extends BaseWorker implements Worker {
         super.setCookies(cookies);
         return this;
     }
+
+    public CustomWorker loadJs(Boolean isLoad){
+        this.loadJs = isLoad;
+        return this;
+    }
 }
