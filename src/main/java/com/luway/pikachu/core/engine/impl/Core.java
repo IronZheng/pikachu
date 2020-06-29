@@ -7,8 +7,10 @@ import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.engine.AbstractTempMethod;
 import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.BathWorker;
+import com.luway.pikachu.core.worker.CustomWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
+import com.luway.pikachu.core.worker.bean.BaseWorker;
 import com.luway.pikachu.core.worker.bean.Target;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.DomSerializer;
@@ -45,9 +47,9 @@ public class Core extends AbstractTempMethod {
     private volatile Boolean flag = true;
 
     // 开启代理开关
-    private volatile Boolean openIpProxy;
+    private volatile Boolean openIpProxy = false;
     // 随机暂停开关
-    private volatile Boolean sleepFlag;
+    private volatile Boolean sleepFlag = false;
 
     private BlockingQueue<Worker> workerQueue;
     private ExecutorService pikachuPool;
@@ -55,8 +57,8 @@ public class Core extends AbstractTempMethod {
     public Core(ExecutorService pikachuPool, Boolean openIpProxy, Boolean sleepFlag) {
         this.workerQueue = new ArrayBlockingQueue<>(1024);
         this.pikachuPool = pikachuPool;
-        this.openIpProxy = false;
-        this.sleepFlag = false;
+        this.openIpProxy = openIpProxy;
+        this.sleepFlag = sleepFlag;
     }
 
     protected boolean putWorker(Worker worker) {
@@ -91,6 +93,17 @@ public class Core extends AbstractTempMethod {
                                 pikachuPool.execute(() -> {
                                     try {
                                         load(bathWorker);
+                                    } catch (Exception e) {
+                                        log.error("core error", e);
+                                    }
+                                });
+                            }
+
+                            if (worker instanceof CustomWorker) {
+                                CustomWorker customWorker = (CustomWorker) worker;
+                                pikachuPool.execute(() -> {
+                                    try {
+                                        load(customWorker);
                                     } catch (Exception e) {
                                         log.error("core error", e);
                                     }
@@ -155,13 +168,14 @@ public class Core extends AbstractTempMethod {
         out(target, url, worker);
     }
 
+
     /**
      * 加载通用方法
      *
      * @param worker
      * @throws Exception
      */
-    public synchronized void load(GeneralWorker worker) throws Exception {
+    public synchronized void load(BaseWorker worker) throws Exception {
         if (worker.isLoadJs()) {
             loadJs(worker);
         } else {
@@ -175,7 +189,7 @@ public class Core extends AbstractTempMethod {
      * @param worker
      * @throws Exception
      */
-    private void loadJs(GeneralWorker worker) throws Exception {
+    private void loadJs(BaseWorker worker) throws Exception {
         // HtmlUnit 模拟浏览器
         WebClient wc = new WebClient(BrowserVersion.FIREFOX_52);
         wc.setJavaScriptTimeout(100000);
@@ -205,7 +219,7 @@ public class Core extends AbstractTempMethod {
      * @param worker
      * @throws Exception
      */
-    private void loadHtml(GeneralWorker worker) throws Exception {
+    private void loadHtml(BaseWorker worker) throws Exception {
         if (worker.getCookies() == null) {
             if (MatchUrl.Method.GET.equals(worker.getMethod())) {
                 doc = getConnection(worker.getUrl())
@@ -238,7 +252,7 @@ public class Core extends AbstractTempMethod {
      * @param target
      * @param worker
      */
-    private synchronized void out(Map<String, Elements> target, String url, Worker worker) {
+    private synchronized void out(Map<String, Elements> target, String url, BaseWorker worker) {
         worker.getPipeline().output(target, url);
         // 将新任务调度到队尾
         if (worker.getPipeline().checkWorker().size() > 0) {
@@ -316,6 +330,7 @@ public class Core extends AbstractTempMethod {
         return doc;
     }
 
+
     private Connection getConnection(String url) {
         // 随机暂停，防止抓取过快对站点造成过大压力
         if (sleepFlag) {
@@ -325,6 +340,7 @@ public class Core extends AbstractTempMethod {
                 .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
                 .header("Accept-Encoding", "gzip, deflate, sdch")
                 .header("Accept-Language", "zh-CN,zh;q=0.8")
+                .ignoreContentType(true)
                 .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36")
                 .validateTLSCertificates(false);
     }

@@ -5,8 +5,10 @@ import com.luway.pikachu.core.engine.PiakchuPoolFactory;
 import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.exception.SimpleException;
 import com.luway.pikachu.core.worker.BathWorker;
+import com.luway.pikachu.core.worker.CustomWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
+import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +44,13 @@ public class PikachuImpl implements Pikachu {
 
     private Core core;
 
-    // 开启代理开关
+    /**
+     * 开启代理开关
+     */
     private volatile Boolean defaultOpenIpProxy = false;
-    // 随机暂停开关
+    /**
+     * 随机暂停开关
+     */
     private volatile Boolean defaultSleepFlag = false;
 
     public PikachuImpl(String name) {
@@ -77,15 +83,20 @@ public class PikachuImpl implements Pikachu {
 
     @Override
     public PikachuImpl regist(GeneralWorker worker) {
-        if (null == worker) {
-            throw new SimpleException(NO_WORKER);
-        }
-        core.putWorker(worker);
-        return this;
+        return registWorker(worker);
     }
 
     @Override
     public PikachuImpl regist(BathWorker worker) {
+        return registWorker(worker);
+    }
+
+    @Override
+    public PikachuImpl regist(CustomWorker worker) {
+        return this.registWorker(worker);
+    }
+
+    private PikachuImpl registWorker(Worker worker) {
         if (null == worker) {
             throw new SimpleException(NO_WORKER);
         }
@@ -103,6 +114,7 @@ public class PikachuImpl implements Pikachu {
         concurrentHashMap.put(worker.getId(), worker);
         return true;
     }
+
 
     @Override
     public void runWorkId(String id) {
@@ -176,6 +188,13 @@ public class PikachuImpl implements Pikachu {
     @Override
     public Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies, Map<String, String> heads) throws IOException {
         return this.core.getConnect(url, method, cookies, heads);
+    }
+
+    @Override
+    public Connection getOnlyConnect() {
+        // todo S
+//        return this.core.getConnect();
+        return null;
     }
 
 }

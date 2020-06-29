@@ -8,24 +8,15 @@ package com.luway.pikachu.core.worker.bean;
 
 public class Target {
     private String name;
-    private String type;
     private String selector;
     private String xpath;
 
-    public Target(String name, String type, String selector,String xpath) {
+    public Target(String name, String selector,String xpath) {
         this.name = name;
-        this.type = type;
         this.selector = selector;
         this.xpath=xpath;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getSelector() {
         return selector;
@@ -55,7 +46,6 @@ public class Target {
     public String toString() {
         return "Target{" +
                 "name='" + name + '\'' +
-                ", type='" + type + '\'' +
                 ", selector='" + selector + '\'' +
                 ", xpath='" + xpath + '\'' +
                 '}';

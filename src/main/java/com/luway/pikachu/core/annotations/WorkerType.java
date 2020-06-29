@@ -7,6 +7,7 @@ package com.luway.pikachu.core.annotations;
  */
 public enum WorkerType {
     BATCH,
-    GENERAL
+    GENERAL,
+    CUSTOM
 }
 

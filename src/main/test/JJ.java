@@ -33,8 +33,16 @@ public class JJ {
                 }));
         pikachu.start();
 
-        Document document = pikachu.getConnect("https://www.zhihu.com/explore", MatchUrl.Method.GET);
-        Elements elements = document.select("#zh-recommend-list > div > h2 > a");
+        //知乎热搜
+//        Document document = pikachu.getConnect("https://www.zhihu.com/explore", MatchUrl.Method.GET);
+//        Elements elements = document.select("#zh-recommend-list > div > h2 > a");
+
+
+
+        Document document = pikachu.getConnect("  http://top.baidu.com/buzz?b=1&fr=20811", MatchUrl.Method.GET);
+        Elements elements = document.select("#main > div.mainBody > div > table > tbody > tr");
+
+
 
         pikachu.stop();
     }

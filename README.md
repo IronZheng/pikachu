@@ -1,4 +1,11 @@
 # pikachu
+
+[![star](https://gitee.com/ironzheng/pikachu/badge/star.svg?theme=dark)](https://gitee.com/ironzheng/pikachu/stargazers)
+![](https://img.shields.io/badge/language-java-orange.svg)
+![](https://img.shields.io/badge/version-1.8-green.svg)
+[![Maven Central](https://img.shields.io/badge/maven-1.1.7-yellow.svg)](https://search.maven.org/artifact/cn.luway/pikachu)
+
+
 皮卡丘，就决定是你了
 
 为什么取个名字叫皮卡丘，大概是这样萌一些。小哥哥是很可爱的。然后本项目是个爬虫项目，使用时候就像派出小精灵一样，派出皮卡丘，就会为你抓回对应的数据。
@@ -23,7 +30,7 @@ https://www.yuque.com/zhenggangmin/pikachu
     <dependency>
       <groupId>cn.luway</groupId>
       <artifactId>pikachu</artifactId>
-      <version>1.1.6</version>
+      <version>1.1.7</version>
     </dependency>
 ```
 计划后续将要加入的功能：
@@ -35,6 +42,25 @@ https://www.yuque.com/zhenggangmin/pikachu
 其他
 
 # 版本动态
+## 1.2.0
+增加了自定义worker，之前设定的worker过于死板，需要开发者编写worker类才能使用，于是增加自定义worker，直接new即可，更加快捷方便。
+
+```java
+ Pikachu pikachu = new PikachuImpl("test")
+                .setCoreNum(10)
+                .setMaxThreadNum(20)
+                .init();
+
+        CustomWorker customWorker = new CustomWorker("https://hz.lianjia.com/ershoufang/xihu/pg2/",MatchUrl.Method.GET)
+                .addAttr("title","body > div.content > div.leftContent > ul > li > div.info.clear > div.title > a")
+                .addPipeline(new BasePipeline() {
+                    @Override
+                    public void output(Map result, String url) {
+                        System.out.println(result);
+                    }
+                });
+        pikachu.regist(customWorker);
+```
 
 ## 1.1.7
 细小改动，升级默认模拟浏览器版本。防止部分网站对老旧浏览器不兼容。

@@ -2,8 +2,10 @@ package com.luway.pikachu.core.engine;
 
 import com.luway.pikachu.core.annotations.MatchUrl;
 import com.luway.pikachu.core.worker.BathWorker;
+import com.luway.pikachu.core.worker.CustomWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.Worker;
+import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
@@ -49,6 +51,14 @@ public interface Pikachu {
      * @return
      */
     Boolean putWork(Worker worker);
+
+
+    /**
+     * 置入一个自定义worker，但不运行
+     * @param worker
+     * @return
+     */
+    Pikachu regist(CustomWorker worker);
 
     /**
      * 运行某个id对应的worker
@@ -132,4 +142,5 @@ public interface Pikachu {
      */
     Document getConnect(String url, MatchUrl.Method method, Map<String, String> cookies,Map<String,String> heads) throws IOException;
 
+    Connection getOnlyConnect();
 }

@@ -3,6 +3,7 @@ import com.luway.pikachu.core.engine.Pikachu;
 import com.luway.pikachu.core.engine.impl.PikachuImpl;
 import com.luway.pikachu.core.pipeline.BasePipeline;
 import com.luway.pikachu.core.worker.BathWorker;
+import com.luway.pikachu.core.worker.CustomWorker;
 import com.luway.pikachu.core.worker.GeneralWorker;
 import com.luway.pikachu.core.worker.bean.Target;
 import com.luway.pikachu.jobs.PikachuJobManage;
@@ -50,37 +51,48 @@ public class TestPikachu {
         List<String> urlList = new ArrayList<>();
 
         Map<String, Target> attr = new HashMap<>();
-        attr.put("title", new Target("title", "List",
+        attr.put("title", new Target("title",
                 "body > div.content > div.leftContent > ul > li > div.info.clear > div.title > a", null));
 
         int i = 1;
-        while (i < 100) {
-            String url = "https://hz.lianjia.com/ershoufang/xihu/pg" + i + "/";
-            urlList.add(url);
-            i++;
-        }
+//        while (i < 100) {
+//            String url = "https://hz.lianjia.com/ershoufang/xihu/pg" + i + "/";
+//            urlList.add(url);
+//            i++;
+//        }
 
         Pikachu pikachu = new PikachuImpl("test")
                 .setCoreNum(10)
                 .setMaxThreadNum(20)
-                .init()
-                .regist(new BathWorker("lj")
-                        .method(MatchUrl.Method.GET)
-                        .urlList(urlList)
-                        .attr(attr)
-                        .addPipeline(new TestPipeline(new TestBean())));
+                .init();
+//                .regist(new BathWorker("lj")
+//                        .method(MatchUrl.Method.GET)
+//                        .urlList(urlList)
+//                        .attr(attr)
+//                        .addPipeline(new TestPipeline(new TestBean())));
 
         PikachuJobManage pikachuJobManage = new PikachuJobManage(pikachu);
 
-        GeneralWorker generalWorker = new GeneralWorker("1", TestBean.class)
-                .addPipeline(new BasePipeline(TestBean.class) {
+        CustomWorker customWorker = new CustomWorker("https://hz.lianjia.com/ershoufang/xihu/pg2/",MatchUrl.Method.GET)
+                .addAttr("title","body > div.content > div.leftContent > ul > li > div.info.clear > div.title > a")
+                .addPipeline(new BasePipeline() {
                     @Override
                     public void output(Map result, String url) {
                         System.out.println(result);
                     }
                 });
+        pikachu.regist(customWorker);
 
-        pikachuJobManage.regiest(generalWorker, 1L, 5L, TimeUnit.SECONDS);
+//
+//        GeneralWorker generalWorker = new GeneralWorker("1", TestBean.class)
+//                .addPipeline(new BasePipeline(TestBean.class) {
+//                    @Override
+//                    public void output(Map result, String url) {
+//                        System.out.println(result);
+//                    }
+//                });
+//
+//        pikachuJobManage.regiest(generalWorker, 1L, 5L, TimeUnit.SECONDS);
         pikachu.start();
 
     }
