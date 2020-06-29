@@ -51,8 +51,6 @@ https://www.yuque.com/zhenggangmin/pikachu
                 .setMaxThreadNum(20)
                 .init();
 
-        PikachuJobManage pikachuJobManage = new PikachuJobManage(pikachu);
-
         CustomWorker customWorker = new CustomWorker("https://hz.lianjia.com/ershoufang/xihu/pg2/",MatchUrl.Method.GET)
                 .addAttr("title","body > div.content > div.leftContent > ul > li > div.info.clear > div.title > a")
                 .addPipeline(new BasePipeline() {
