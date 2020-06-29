@@ -42,6 +42,27 @@ https://www.yuque.com/zhenggangmin/pikachu
 其他
 
 # 版本动态
+## 1.2.0
+增加了自定义worker，之前设定的worker过于死板，需要开发者编写worker类才能使用，于是增加自定义worker，直接new即可，更加快捷方便。
+
+```java
+ Pikachu pikachu = new PikachuImpl("test")
+                .setCoreNum(10)
+                .setMaxThreadNum(20)
+                .init();
+
+        PikachuJobManage pikachuJobManage = new PikachuJobManage(pikachu);
+
+        CustomWorker customWorker = new CustomWorker("https://hz.lianjia.com/ershoufang/xihu/pg2/",MatchUrl.Method.GET)
+                .addAttr("title","body > div.content > div.leftContent > ul > li > div.info.clear > div.title > a")
+                .addPipeline(new BasePipeline() {
+                    @Override
+                    public void output(Map result, String url) {
+                        System.out.println(result);
+                    }
+                });
+        pikachu.regist(customWorker);
+```
 
 ## 1.1.7
 细小改动，升级默认模拟浏览器版本。防止部分网站对老旧浏览器不兼容。
